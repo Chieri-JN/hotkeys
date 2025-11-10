@@ -20,16 +20,40 @@
 //
 // export default config;
 
+// import adapter from '@sveltejs/adapter-static';
+//
+// /** @type {import('@sveltejs/kit').Config} */
+// const config = {
+// 	kit: {
+// 		adapter: adapter({ fallback: '404.html' }),
+// 		paths: {
+// 			base: process.argv.includes('dev') ? '' : process.env.BASE_PATH,
+// 		},
+// 	},
+// };
+//
+// export default config;
+
 import adapter from '@sveltejs/adapter-static';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+
+const dev = process.argv.includes('dev');
+const repoName = 'hotkeys'; // 👈 replace with your repo name
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	kit: {
-		adapter: adapter({ fallback: '404.html' }),
+		adapter: adapter({
+			fallback: '404.html'
+		}),
 		paths: {
-			base: process.argv.includes('dev') ? '' : process.env.BASE_PATH,
+			base: dev ? '' : `/${repoName}`
 		},
+		prerender: {
+			handleHttpError: 'warn' // avoids breaking if some routes fail prerender
+		}
 	},
+	preprocess: vitePreprocess()
 };
 
 export default config;
