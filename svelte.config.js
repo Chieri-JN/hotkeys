@@ -38,7 +38,7 @@ import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 const dev = process.argv.includes('dev');
-const repoName = 'hotkeys'; // 👈 replace with your repo name
+const repoName = 'hotkeys';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -50,7 +50,7 @@ const config = {
 			base: dev ? '' : `/${repoName}`
 		},
 		prerender: {
-			handleHttpError: 'warn' // avoids breaking if some routes fail prerender
+			handleHttpError: 'warn'
 		}
 	},
 	preprocess: vitePreprocess()
