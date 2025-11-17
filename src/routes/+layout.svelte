@@ -11,11 +11,12 @@
 </svelte:head>
 
 <h1 class="title"><span class="hot">Hot</span>KEYS</h1>
-<p>Heat Map of your keystrokes</p>
+<!--<p>Heat Map of your keystrokes</p>-->
 
 <style>
 	.title {
 		font-size: 3rem;
+		padding-left: 3em;
 		/*font-weight: bold;*/
 		font-family: "redonda", sans-serif;
 		font-weight: 800;

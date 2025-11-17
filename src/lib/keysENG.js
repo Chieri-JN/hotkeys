@@ -70,43 +70,43 @@ export let staggered = [
             size: 1.5
         },
         {
-            key: ["Q"],
+            key: ["Q", "q"],
             code: "KeyQ"
         },
         {
-            key: ["W"],
+            key: ["W", "w"],
             code: "KeyW"
         },
         {
-            key: ["E"],
+            key: ["E", "e"],
             code: "KeyE"
         },
         {
-            key: ["R"],
+            key: ["R", "r"],
             code: "KeyR"
         },
         {
-            key: ["T"],
+            key: ["T", "t"],
             code: "KeyT"
         },
         {
-            key: ["Y"],
+            key: ["Y", "y"],
             code: "KeyY"
         },
         {
-            key: ["U"],
+            key: ["U", "u"],
             code: "KeyU"
         },
         {
-            key: ["I"],
+            key: ["I", "i"],
             code: "KeyI"
         },
         {
-            key: ["O"],
+            key: ["O", "o"],
             code: "KeyO"
         },
         {
-            key: ["P"],
+            key: ["P", "p"],
             code: "KeyP"
         },
         {
@@ -130,41 +130,41 @@ export let staggered = [
             size: 1.75
         },
         {
-            key: ["A"],
+            key: ["A", "a"],
             code: "KeyA"
         },
         {
-            key: ["S"],
+            key: ["S", "s"],
             code: "KeyS"
         },
         {
-            key: ["D"],
+            key: ["D","d"],
             code: "KeyD"
         },
         {
-            key: ["F"],
+            key: ["F", "f"],
             code: "KeyF",
             homing: true
         },
         {
-            key: ["G"],
+            key: ["G", "g"],
             code: "KeyG"
         },
         {
-            key: ["H"],
+            key: ["H", "h"],
             code: "KeyH"
         },
         {
-            key: ["J"],
+            key: ["J", "j"],
             code: "KeyJ",
             homing: true
         },
         {
-            key: ["K"],
+            key: ["K", "k"],
             code: "KeyK"
         },
         {
-            key: ["L"],
+            key: ["L", "l"],
             code: "KeyL"
         },
         {
@@ -188,31 +188,31 @@ export let staggered = [
             size: 2.25
         },
         {
-            key: ["Z"],
+            key: ["Z", "z"],
             code: "KeyZ"
         },
         {
-            key: ["X"],
+            key: ["X", "x"],
             code: "KeyX"
         },
         {
-            key: ["C"],
+            key: ["C", "c"],
             code: "KeyC"
         },
         {
-            key: ["V"],
+            key: ["V", "v"],
             code: "KeyV"
         },
         {
-            key: ["B"],
+            key: ["B", "b"],
             code: "KeyB"
         },
         {
-            key: ["N"],
+            key: ["N", "n"],
             code: "KeyN"
         },
         {
-            key: ["M"],
+            key: ["M", "m"],
             code: "KeyM"
         },
         {
@@ -240,7 +240,7 @@ export let staggered = [
             size: 1.25
         },
         {
-            key: ["Win"],
+            key: ["Cmd/Win"],
             code: "MetaLeft",
             size: 1.25
         },
@@ -260,7 +260,7 @@ export let staggered = [
             size: 1.25
         },
         {
-            key: ["Win"],
+            key: ["Cmd/Win"],
             code: "MetaRight",
             size: 1.25
         },

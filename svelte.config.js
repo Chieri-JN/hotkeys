@@ -51,7 +51,11 @@ const config = {
 		},
 		prerender: {
 			handleHttpError: 'warn'
-		}
+		},
+		// alias: {
+		// 	$lib: './src/lib',
+		// 	'$lib/*': './src/lib/*'
+		// }
 	},
 	preprocess: vitePreprocess()
 };
