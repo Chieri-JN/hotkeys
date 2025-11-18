@@ -2,6 +2,7 @@
 
     import Keyboard from "$lib/Keyboard.svelte";
     import KeyGraph from  "$lib/KeyGraph.svelte"
+    import { parseData } from "../lib/dataProcessor.js";
     import {fillerKeyType} from "../lib/constants.js"
 
     // import {keyType} from "$lib/types";
@@ -16,29 +17,46 @@
         selectedKeys = keys
     }
 
+    let loadedData  = $state(null);
+
 
 
 </script>
+{#if selectedView==="text"}
+    <div >
+        <div class="allContent">
+            <!--        VIEW-->
+            {#each selectedKeys as sKeys}
+                {#if sKeys}
+                    <div class="keyGraph">
+                        <KeyGraph data={{text: "", words : [""]}}  chosenKey={sKeys.char} code={sKeys.char} count={0}/>
+                    </div>
+                {/if}
 
+            {/each}
 
-<div >
-    <div class="allContent">
-<!--        VIEW-->
-        {#each selectedKeys as sKeys}
-            {#if sKeys}
-                <div class="keyGraph">
-                    <KeyGraph data={{text: "", words : [""]}}  chosenKey={sKeys.char} code={sKeys.char} count={0}/>
-                </div>
-            {/if}
-
-        {/each}
-
+        </div>
+        <div class="keyboard">
+            <Keyboard name={"name"} selectKeys={selectedKey}/>
+        </div>
+        <h1 class = "selection" style = "padding-left: 4.5em">Select Views</h1>
     </div>
-    <div class="keyboard">
-        <Keyboard name={"name"} selectKeys={selectedKey}/>
-    </div>
-    <h1 class = "selection" style = "padding-left: 4.5em">Select Views</h1>
-</div>
+
+{:else if selectedView==="live"}
+
+{:else if selectedView==="type"}
+
+{:else if selectedView==="upload"}
+
+    {#await loadedData}
+        <p>loading data...</p>
+    {:then data}
+
+    {:catch error}
+        <p>Something went wrong: {error.message}</p>
+    {/await}
+{/if}
+
 
 
 

@@ -11,6 +11,7 @@
 </svelte:head>
 
 <h1 class="title"><span class="hot">Hot</span>KEYS</h1>
+<nav></nav>
 <!--<p>Heat Map of your keystrokes</p>-->
 
 <style>
@@ -35,6 +36,8 @@
 		font-weight: 500;
 		font-style: normal;
 	}
+
+
 </style>
 
 {@render children?.()}

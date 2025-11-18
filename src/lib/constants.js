@@ -41,7 +41,6 @@ export const customKeyDimensions = (dim) =>
     "live",
     "text",
     "upload",
-    "challenge"
 ]
 
 

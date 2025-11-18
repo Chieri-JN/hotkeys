@@ -69,6 +69,10 @@
         if (onClick) onClick(code, key);
     }
 
+    function doubleClick(event, d) {
+
+    }
+
     function makeKey() {
 
         if (!gElem) return;
@@ -110,10 +114,6 @@
             .attr("font-size", keyDimensions.fontSize)
             .attr("font-family", "neue-haas-grotesk-display, sans-serif")
             .attr("font-weight", 500)
-            // .on("mouseover", mouseover )
-            // .on("mousemove", mousemove )
-            // .on("mouseleave", mouseleave )
-            // .on("click", mouseclick )
             .text(key);
 
         textElem = g.append("text")
@@ -124,10 +124,6 @@
             .attr("font-size", 12)
             .attr("font-family", "neue-haas-grotesk-display, sans-serif")
             .attr("font-weight", 500)
-            // .on("mouseover", mouseover )
-            // .on("mousemove", mousemove )
-            // .on("mouseleave", mouseleave )
-            // .on("click", mouseclick )
             .text(Math.round(count))
 
         if (!tooltip) {
