@@ -1,6 +1,13 @@
 <script lang="ts">
 	import favicon from '$lib/assets/favicon.svg';
+	import { goto } from '$app/navigation';
+	let selected = '/';
 
+	function handleChange(event) {
+		const value = event.target.value;
+		selected = value;
+		goto(value);     // navigate to selected route
+	}
 	let { children } = $props();
 </script>
 
@@ -10,11 +17,25 @@
 	<link rel="stylesheet" href="https://use.typekit.net/cfe6wef.css">
 </svelte:head>
 
-<h1 class="title"><span class="hot">Hot</span>KEYS</h1>
-<nav></nav>
+
+<nav>
+	<h1 class="title"><span class="hot">Hot</span>KEYS</h1>
+	<label>
+		<input type="radio" name="page" value="/" on:change={handleChange} />
+		<p2>Interactive</p2>
+	</label>
+
+	<label>
+		<input type="radio" name="page" value="/gallery" on:change={handleChange} />
+		<p2>Gallery</p2>
+	</label>
+</nav>
 <!--<p>Heat Map of your keystrokes</p>-->
 
 <style>
+	nav {
+
+	}
 	.title {
 		font-size: 3rem;
 		padding-left: 3em;
@@ -31,7 +52,7 @@
 
 	}
 
-	p {
+	p2 {
 		font-family: "neue-haas-grotesk-display", sans-serif;
 		font-weight: 500;
 		font-style: normal;

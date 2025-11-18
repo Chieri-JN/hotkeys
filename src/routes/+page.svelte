@@ -3,13 +3,13 @@
     import Keyboard from "$lib/Keyboard.svelte";
     import KeyGraph from  "$lib/KeyGraph.svelte"
     import { parseData } from "../lib/dataProcessor.js";
-    import {fillerKeyType} from "../lib/constants.js"
+    import {fillerKeyType, views} from "../lib/constants.js"
 
     // import {keyType} from "$lib/types";
-    let selectedView = $state("text");
-    let selectedChar = $state("KeyE");
+    let selectedView = $state("live");
+    let isStatic = $state(false);
+    let allowCooling = $state(false);
     let selectedKeys = $state([fillerKeyType, fillerKeyType, fillerKeyType]);
-    let selectedKeyboards = $state(new Array(4));
     import type { keyType } from "../lib/types";
 
     function selectedKey (keys : keyType[]) {
@@ -20,48 +20,86 @@
     let loadedData  = $state(null);
 
 
-
 </script>
-{#if selectedView==="text"}
-    <div >
-        <div class="allContent">
-            <!--        VIEW-->
-            {#each selectedKeys as sKeys}
-                {#if sKeys}
-                    <div class="keyGraph">
-                        <KeyGraph data={{text: "", words : [""]}}  chosenKey={sKeys.char} code={sKeys.char} count={0}/>
-                    </div>
-                {/if}
+<div class="options">
 
+    <label>
+        Select a view
+        <select class="selection" bind:value={selectedView}>
+            Select a View
+            {#each views as v}
+                <option value={v.id}>
+                    {v.name}
+                </option>
             {/each}
-
-        </div>
-        <div class="keyboard">
-            <Keyboard name={"name"} selectKeys={selectedKey}/>
-        </div>
-        <h1 class = "selection" style = "padding-left: 4.5em">Select Views</h1>
+        </select>
+    </label>
+</div>
+<div class="main">
+    <div class="sliderSpace">
+        <input class="timeSlider" type="range" name="slider" min="0" max="100" >
     </div>
+    {#if selectedView==="live"}
 
-{:else if selectedView==="live"}
+        <div >
+            <div class="allContent">
+                {#each selectedKeys as sKeys}
+                    {#if sKeys}
+                        <div class="keyGraph">
+                            <KeyGraph data={{text: "", words : [""]}}  chosenKey={sKeys.char} code={sKeys.char} count={0}/>
+                        </div>
+                    {/if}
 
-{:else if selectedView==="type"}
+                {/each}
 
-{:else if selectedView==="upload"}
+            </div>
+            <div class="cooler">
+                <input type="checkbox" bind:checked={allowCooling}>
+                Allow Cooling
+            </div>
+            <div class="keyboard">
+                <Keyboard name={"name"} selectKeys={selectedKey} isStatic={isStatic} allowCooling={allowCooling}/>
+            </div>
+        </div>
 
-    {#await loadedData}
-        <p>loading data...</p>
-    {:then data}
+    {:else if selectedView==="justTyping"}
+        <div class="cooler">
+            <input type="checkbox" bind:checked={allowCooling}>
+            Allow Cooling
+        </div>
 
-    {:catch error}
-        <p>Something went wrong: {error.message}</p>
-    {/await}
-{/if}
+        <div class="keyboard">
+            <Keyboard name={"name"} selectKeys={selectedKey} isStatic={isStatic} allowCooling={allowCooling}/>
+        </div>
+    {:else if selectedView==="gallerySelection"}
+        <h2>Select one of the Gallery texts!</h2>
+    {:else if selectedView==="upload"}
+        <h2>Upload a text file!</h2>
+        {#await loadedData}
+            <p>loading data...</p>
+        {:then data}
+
+        {:catch error}
+            <p>Something went wrong: {error.message}</p>
+        {/await}
+    {/if}
+</div>
+
+<!--<h1 class = "selection" style = "padding-left: 4.5em">Select Views</h1>-->
+<!--<input type="">-->
 
 
 
 
 <style>
 
+    .options {
+        display: flex;
+        padding-top: 1em;
+        justify-content: flex-start;
+        align-items: center;
+        /*align-content: center;*/
+    }
     .keyboard {
         width: 100vw;
         display: flex;
@@ -74,9 +112,10 @@
         justify-content: center;
     }
     .selection {
-        font-family: "neue-haas-grotesk-display", sans-serif;
-        font-weight: 600;
-        font-style: normal;
+        /*font-family: "neue-haas-grotesk-display", sans-serif;*/
+        /*font-weight: 600;*/
+        /*font-style: normal;*/
+        /*padding: 1em;*/
     }
 
     .keyGraph {
@@ -84,5 +123,31 @@
         padding-right: 0.85em;
         padding-bottom: 1em;
     }
+    .timeSlider {
+        /*justify-content: center;*/
+        /*width: 80vw;*/
+        /*padding-left: 5em;*/
+        width: 80vw;
+        max-width: 1200px;
+        background: #000;
+    }
+    .sliderSpace {
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;
+    }
+
+    .main {
+        justify-content: center;
+        /*display: inline-flex;*/
+    }
+    .cooler {
+        padding-left: 10em;
+        padding-right: 5em;
+        /*padding-top: 1em;*/
+        /*justify-content: center;*/
+    }
+
 </style>
 

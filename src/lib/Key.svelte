@@ -2,7 +2,7 @@
     import {onMount} from "svelte";
     import * as d3 from "d3";
     import type {textData} from "./types";
-    import { cooldowns, getColour, getColour2, getColour3, keyDimensions} from "./constants";
+    import { cooldowns, getColour, getColour2, getColour3, customKeyDimensions, emptyData} from "./constants";
 
 
     let {
@@ -11,10 +11,12 @@
         code,
         shiftOn=false,
         count=0,
-        corpus = {text: "", words : [""]},
+        corpus = emptyData,
         isStatic=false,
         onUpdate,
-        onClick
+        onClick,
+        dims = 70,
+        allowCooling=false
     } :
         {
             key : string,
@@ -25,11 +27,12 @@
             corpus : textData,
             isStatic:boolean
             onUpdate ?: (code: string, count: number, char: string) => void,
-            onClick?: (code: string, char : string) => void
-
+            onClick?: (code: string, char : string) => void,
+            dims : number,
+            allowCooling : boolean
         } = $props()
 
-
+    let keyDimensions = customKeyDimensions(dims)
     let svgElem: SVGSVGElement;
     let gElem: SVGGElement;
     let toolElem : HTMLDivElement;
@@ -95,7 +98,7 @@
         .attr("height", keyDimensions.h)
         .attr("rx", 6)
         .attr("ry", 6)
-        .attr("fill", getColour2(count))
+        .attr  ("fill", getColour2(count))
         .attr("stroke", "#111111")
         .attr("stroke-width", 1)
         .style("border-radius", "5px")
@@ -104,6 +107,8 @@
         .on("mousemove", mousemove )
         .on("mouseleave", mouseleave )
         .on("click", mouseclick )
+
+        // rectElem.transition().duration(500).attr("fill", getColour2(count))
 
 
         g.append("text")
@@ -167,10 +172,43 @@
             updateKey();
             if (onUpdate) onUpdate(code, count, key);
         }
+
     });
 
-    let last = performance.now();
 
+    let rafId: number | null = null;
+    let lastTime = performance.now();
+
+    function coolingStep(now: number) {
+        const dt = now - lastTime;
+        lastTime = now;
+        count -= dt * cooldowns.one;
+        if (count < 0) count = 0;
+        updateKey();
+        if (allowCooling) {
+            rafId = requestAnimationFrame(coolingStep);
+        } else {
+            rafId = null;
+        }
+    }
+
+    $effect(() => {
+        if (!isStatic) {
+            if (allowCooling && !rafId) {
+                lastTime = performance.now();
+                rafId = requestAnimationFrame(coolingStep);
+            }
+            if (!allowCooling && rafId) {
+                cancelAnimationFrame(rafId);
+                rafId = null;
+            }
+        }
+    });
+
+
+
+
+    let last = performance.now();
     function decay(now: number) {
         const dt = now - last;
         last = now;
@@ -184,7 +222,7 @@
     onMount(() =>{
 
         if (!isStatic) {// makeKey();
-            requestAnimationFrame(decay);
+
             const handleKeyDown = (event: KeyboardEvent) => {
                 if (event.code === code) {
                     count++;

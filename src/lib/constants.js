@@ -1,4 +1,6 @@
 import * as d3 from "d3";
+import {charToKeys, parseData, parseString} from "$lib/dataProcessor.js";
+import {text1} from "$lib/sampleTexts.js";
 // import type {keyType} from "./types.js";
 
 export const cooldowns = {
@@ -13,46 +15,68 @@ export  const fillerKeyType = {
     heatValue : 0
 }
 
-const dim = 70
-export const keyDimensions = {
-    h : dim,
-    w : dim,
-    textX : dim/2,
-    textY : dim/2,
-    fontSize : dim*0.25
+export const customKeyDimensions = (dim) =>
+{
+    return {
+        h: dim,
+        w: dim,
+        textX: dim / 2,
+        textY: dim / 2,
+        fontSize: dim * 0.25
+    }
+}
+
+export const keyDimensions = customKeyDimensions(70)
+
+
+
+export const emptyData = {text: "", words : [""], freq:{"" : 0}, keyFreq: {"" : 0}}
+export const sampleData = parseString(text1)
+
+export const views = [
+    {id: "live", name: "Live Typing"},
+    {id : "gallerySelection", name: "Gallery Selection"},
+    {id: "upload", name: "Upload text"},
+    {id :  "justTyping", name: "Just Typing"}
+]
+
+const rMin = 0
+const rMax = 200
+const getScale = (d) => Math.log(d+1) * 12
+export const getColour = d3.scaleLinear()
+    .range(["white", "#bd0101"])
+    .domain([rMin,rMax])
+    .clamp(true)
+
+const colRange = d3.interpolateRgbBasis(["white", "yellow", "orange", "#bd0101"])
+const colRange2 = d3.interpolateRgbBasis(["white", "#fd861e","#fd4a1e", "#cc0b0b"])
+export const getColour2 = d3.scaleSequential(colRange2)
+    .domain([getScale(rMin),getScale(rMax)])
+    .clamp(true)
+export const getColour3 = d3.scaleSequential(d3.interpolateInferno)
+    // .domain([1,50])
+    .domain([Math.log(rMin), Math.log(rMax)])
+    .clamp(true)
+
+
+
+
+function simulateKeypressEvents(str) {
+    const events = [];
+
+    for (const ch of str) {
+        const entry = charToKeys[ch];
+        if (!entry) continue;
+
+        if (entry.shift) {
+            events.push({ key: "Shift", code: "ShiftLeft" });
+        }
+
+        events.push({ key: ch, code: entry.code });
+    }
+
+    return events;
 }
 
 
 
-export const customKeyDimensions = (dim) =>
-    {
-        return {
-            h: dim,
-            w: dim,
-            textX: dim / 2,
-            textY: dim / 2,
-            fontSize: dim * 0.25
-        }
-    }
-
-
-
-    export const views = [
-    "live",
-    "text",
-    "upload",
-]
-
-
-export const getColour = d3.scaleLinear()
-    .range(["white", "#bd0101"])
-    .domain([1,50])
-
-const colRange = d3.interpolateRgbBasis(["white", "yellow", "orange", "#bd0101"])
-const colRange2 = d3.interpolateRgbBasis(["white", "#ff380a", "#9f0000"])
-export const getColour2 = d3.scaleSequential(colRange2)
-    .domain([0,40])
-    .clamp(true)
-export const getColour3 = d3.scaleSequential(d3.interpolateInferno)
-    .domain([1,50])
-    .domain([Math.log(1), Math.log(50)])

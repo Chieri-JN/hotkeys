@@ -1,15 +1,17 @@
 <script lang="ts">
     import { staggered } from "./keysENG";
     import Key from "$lib/Key.svelte";
-    import { cooldowns, keyDimensions } from "./constants";
+    import { cooldowns, customKeyDimensions,emptyData } from "./constants";
     import type {textData, keyType} from "./types";
-    let {name, data, selectKeys} : { name: string,  data : textData, selectKeys ?: (keys : keyType []) => void} = $props()
+    let {name="", data=emptyData, selectKeys=undefined, isStatic=false, boardDims=70, allowCooling=false} :
+        { name: string,  data : textData, selectKeys ?: (keys : keyType []) => void, isStatic :boolean, boardDims:number, allowCooling:boolean} = $props()
 
     let shiftPressed = false
     let selectedKeys : keyType [] = $state(new Array(3))
+    let keyDimensions = customKeyDimensions(boardDims)
 
     let rowWidths = staggered.map( row => row.reduce((sum, key) => sum + keyDimensions.w * (key.size ?? 1), 0));
-    const maxRowWidth = Math.max(...rowWidths) + 40;
+    const maxRowWidth = Math.max(...rowWidths) + boardDims/2;
     let selectedKey = $state("KeyE")
 
     let rowGaps = staggered.map((row, i) => {
@@ -24,7 +26,8 @@
         return {
             char : chr,
             heatValue : count,
-            code : code
+            code : code,
+            shift : shiftPressed
         }
     }
 
@@ -68,9 +71,12 @@
                          size={key.size ?? 1}
                          code={key.code}
                          shiftOn={shiftPressed}
-                         isStatic={false}
+                         isStatic={isStatic}
                          onUpdate={handleKeyUpdate}
                          onClick={handleKeyClick}
+                         dims={boardDims}
+                         allowCooling={allowCooling}
+                         count={data.keyFreq[key.code] ?? 0}
                      />
                   </div>
             {/each}
