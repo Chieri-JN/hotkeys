@@ -24,23 +24,6 @@
             align-items: start;
             grid-auto-rows: min-content;
 
-        article {
-            /*display: grid;  */
-            display: grid;
-            grid-template-rows: subgrid;
-            grid-row: span 3;
-        }
-        h2 {
-            margin: 0;
-        }
 
-        h1, h2, h3, h4, h5, h6 {
-            line-height: 1.1;
-            text-wrap: balance;
-        }
-
-        h1 {
-            font-size: 400%;
-        }
     }
 </style>
