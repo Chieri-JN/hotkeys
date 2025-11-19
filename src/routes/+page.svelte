@@ -78,7 +78,7 @@
         {#await loadedData}
             <p>loading data...</p>
         {:then data}
-
+            <p>loaded data!</p>
         {:catch error}
             <p>Something went wrong: {error.message}</p>
         {/await}
