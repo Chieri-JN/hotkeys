@@ -1,5 +1,5 @@
 <script lang="ts">
-    import GalleryDataset from "$lib/galleryDataset.svelte";
+    import GalleryDataset from "$lib/GalleryDataset.svelte";
     import { sampleData } from "../../lib/constants";
 </script>
 
