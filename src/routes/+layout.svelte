@@ -21,12 +21,12 @@
 <nav>
 	<h1 class="title"><span class="hot">Hot</span>KEYS</h1>
 	<label>
-		<input type="radio" name="page" value="/" on:change={handleChange} />
+		<input type="radio" name="page" value="/" onchange={handleChange} />
 		<p2>Interactive</p2>
 	</label>
 
 	<label>
-		<input type="radio" name="page" value="/gallery" on:change={handleChange} />
+		<input type="radio" name="page" value="/gallery" onchange={handleChange} />
 		<p2>Gallery</p2>
 	</label>
 </nav>
