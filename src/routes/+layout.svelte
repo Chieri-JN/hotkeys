@@ -1,6 +1,8 @@
 <script lang="ts">
 	import favicon from '$lib/assets/favicon.svg';
 	import { goto } from '$app/navigation';
+	import { showLayout } from '$lib/stores.js';
+	import Title from '$lib/title.svelte';
 	let selected = '/';
 
 	function handleChange(event) {
@@ -18,27 +20,27 @@
 </svelte:head>
 
 
-<nav>
-	<h1 class="title"><span class="hot">Hot</span>KEYS</h1>
-	<label>
-		<input type="radio" name="page" value="/" onchange={handleChange} />
-		<p2>Interactive</p2>
-	</label>
+{#if $showLayout}
+	<nav>
+		<Title weight={500} size={1.5}/>
+<!--		<label>-->
+<!--			<input type="radio" name="page" value="/" onchange={handleChange} />-->
+<!--			<p2>Interactive</p2>-->
+<!--		</label>-->
 
-	<label>
-		<input type="radio" name="page" value="/gallery" onchange={handleChange} />
-		<p2>Gallery</p2>
-	</label>
-</nav>
-<!--<p>Heat Map of your keystrokes</p>-->
+<!--		<label>-->
+<!--			<input type="radio" name="page" value="/gallery" onchange={handleChange} />-->
+<!--			<p2>Gallery</p2>-->
+<!--		</label>-->
+	</nav>
+	<!--<p>Heat Map of your keystrokes</p>-->
+{/if}
 
 <style>
 	nav {
-
-	}
-	.title {
+		.title {
 		font-size: 3rem;
-		padding-left: 3em;
+		padding-left: 0.25em;
 		/*font-weight: bold;*/
 		font-family: "redonda", sans-serif;
 		font-weight: 800;
@@ -51,6 +53,8 @@
 		text-transform: uppercase;
 
 	}
+	}
+	
 
 	p2 {
 		font-family: "neue-haas-grotesk-display", sans-serif;

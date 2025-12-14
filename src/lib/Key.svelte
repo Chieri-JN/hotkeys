@@ -2,7 +2,7 @@
     import {onMount} from "svelte";
     import * as d3 from "d3";
     import type {textData} from "./types";
-    import { cooldowns, getColour, getColour2, getColour3, customKeyDimensions, emptyData} from "./constants";
+    import { cooldowns, getColour2, getColour3, customKeyDimensions, emptyData} from "./constants";
 
 
     let {
@@ -16,7 +16,9 @@
         onUpdate,
         onClick,
         dims = 70,
-        allowCooling=false
+        allowCooling=false,
+        isSpecial=false,
+        inKeyboard=true
     } :
         {
             key : string,
@@ -29,7 +31,9 @@
             onUpdate ?: (code: string, count: number, char: string) => void,
             onClick?: (code: string, char : string) => void,
             dims : number,
-            allowCooling : boolean
+            allowCooling : boolean,
+            isSpecial : boolean
+            inKeyboard : boolean
         } = $props()
 
     let keyDimensions = customKeyDimensions(dims)
@@ -103,50 +107,78 @@
         .attr("stroke-width", 1)
         .style("border-radius", "5px")
         .style("cursor", "pointer")
-        .on("mouseover", mouseover )
-        .on("mousemove", mousemove )
-        .on("mouseleave", mouseleave )
+        .on("mouseover", isStatic ? () => {} : mouseover )
+        .on("mousemove", isStatic ? () => {} : mousemove )
+        .on("mouseleave", isStatic ? () => {} : mouseleave )
         .on("click", mouseclick )
 
         // rectElem.transition().duration(500).attr("fill", getColour2(count))
+            
 
+        if (!inKeyboard){
+            g.append("text")
+                .attr("x", (keyDimensions.textX * size) )
+                .attr("y", keyDimensions.textY + keyDimensions.dim * 0.025)
+                .attr("text-anchor", "middle")
+                .attr("dominant-baseline", "middle")
+                .attr("fill", "black")
+                .attr("font-size", keyDimensions.fontSize)
+                .attr("font-family", "neue-haas-grotesk-display, sans-serif")
+                .attr("font-weight", 700)
+                .text(key);
+        }else if (!isSpecial) {
+            g.append("text")
+                .attr("x", (keyDimensions.textX * size) )
+                .attr("y", keyDimensions.textY)
+                .attr("text-anchor", "middle")
+                .attr("fill", "black")
+                .attr("font-size", keyDimensions.fontSize)
+                .attr("font-family", "neue-haas-grotesk-display, sans-serif")
+                .attr("font-weight", 500)
+                .text(key);
 
-        g.append("text")
-            .attr("x", (keyDimensions.textX * size) )
-            .attr("y", keyDimensions.textY)
-            .attr("text-anchor", "middle")
-            .attr("fill", "black")
-            .attr("font-size", keyDimensions.fontSize)
-            .attr("font-family", "neue-haas-grotesk-display, sans-serif")
-            .attr("font-weight", 500)
-            .text(key);
+            if (!isStatic) {  
+                textElem = g.append("text")
+                    .attr("x", (keyDimensions.textX * size) )
+                    .attr("y", keyDimensions.textY + 20)
+                    .attr("text-anchor", "middle")
+                    .attr("fill", "black")
+                    .attr("font-size", 12)
+                    .attr("font-family", "neue-haas-grotesk-display, sans-serif")
+                    .attr("font-weight", 500)
+                    .text(Math.round(count))
+            }
+        }else{
+                g.append("text")
+                .attr("x", (keyDimensions.textX * size) )
+                .attr("y", keyDimensions.textY)
+                // .attr("y", keyDimensions.textY + keyDimensions.dim * 0.025)
+                .attr("text-anchor", "middle")
+                // .attr("dominant-baseline", "middle")
+                .attr("fill", "black")
+                .attr("font-size", keyDimensions.fontSize)
+                .attr("font-family", "neue-haas-grotesk-display, sans-serif")
+                .attr("font-weight", 700).text(key);
+        }
+            
 
-        textElem = g.append("text")
-            .attr("x", (keyDimensions.textX * size) )
-            .attr("y", keyDimensions.textY + 20)
-            .attr("text-anchor", "middle")
-            .attr("fill", "black")
-            .attr("font-size", 12)
-            .attr("font-family", "neue-haas-grotesk-display, sans-serif")
-            .attr("font-weight", 500)
-            .text(Math.round(count))
 
         if (!tooltip) {
-            tooltip = d3.select("body")
-                .append("div")
-                .attr("class", "tooltip")
-                .style("opacity", 0)
-                .style("background-color", "white")
-                .style("border-color", "#5577bb")
-                .style("border", "solid")
-                .style("border-radius", "5px")
-                .style("border-width", "2px")
-                .style("padding", "8px")
-                .style("position", "absolute")
-                .style("font-family", " redonda, sans-serif")
-                .style("font-style", "normal")
-                // .style("font-weight", 400)
-                .style("pointer-events", "none");
+                tooltip = d3.select("body")
+                    .append("div")
+                    .attr("class", "tooltip")
+                    .style("opacity", 0)
+                    .style("background-color", "white")
+                    .style("border-color", "#5577bb")
+                    .style("border", "solid")
+                    .style("border-radius", "5px")
+                    .style("border-width", "2px")
+                    .style("padding", "8px")
+                    .style("position", "absolute")
+                    .style("font-family", " redonda, sans-serif")
+                    .style("font-style", "normal")
+                    // .style("font-weight", 400)
+                    .style("pointer-events", "none");
         }
 
         keyInitialized = true;

@@ -1,6 +1,6 @@
-// Taken from https://github.com/monkeytypegame/monkeytype-fingermap/blob/master/script/layouts.js
+// Dvorak keyboard layout
 
-export let staggeredENG = [
+export let staggeredDvorak = [
     [
         {
             key: ["`", "~"],
@@ -47,11 +47,11 @@ export let staggeredENG = [
             code: "Digit0"
         },
         {
-            key: ["_", "-"],
+            key: ["{", "["],
             code: "Minus"
         },
         {
-            key: ["+", "="],
+            key: ["}", "]"],
             code: "Equal"
         },
         {
@@ -70,52 +70,52 @@ export let staggeredENG = [
             size: 1.5
         },
         {
-            key: ["Q", "q"],
-            code: "KeyQ"
+            key: ['"', "'"],
+            code: "Quote"
         },
         {
-            key: ["W", "w"],
-            code: "KeyW"
+            key: ["<", ","],
+            code: "Comma"
         },
         {
-            key: ["E", "e"],
-            code: "KeyE"
-        },
-        {
-            key: ["R", "r"],
-            code: "KeyR"
-        },
-        {
-            key: ["T", "t"],
-            code: "KeyT"
-        },
-        {
-            key: ["Y", "y"],
-            code: "KeyY"
-        },
-        {
-            key: ["U", "u"],
-            code: "KeyU"
-        },
-        {
-            key: ["I", "i"],
-            code: "KeyI"
-        },
-        {
-            key: ["O", "o"],
-            code: "KeyO"
+            key: [">", "."],
+            code: "Period"
         },
         {
             key: ["P", "p"],
             code: "KeyP"
         },
         {
-            key: ["{", "["],
-            code: "BracketLeft"
+            key: ["Y", "y"],
+            code: "KeyY"
         },
         {
-            key: ["}", "]"],
-            code: "BracketRight"
+            key: ["F", "f"],
+            code: "KeyF"
+        },
+        {
+            key: ["G", "g"],
+            code: "KeyG"
+        },
+        {
+            key: ["C", "c"],
+            code: "KeyC"
+        },
+        {
+            key: ["R", "r"],
+            code: "KeyR"
+        },
+        {
+            key: ["L", "l"],
+            code: "KeyL"
+        },
+        {
+            key: ["?", "/"],
+            code: "Slash"
+        },
+        {
+            key: ["+", "="],
+            code: "Equal"
         },
         {
             key: ["|", "\\"],
@@ -134,46 +134,46 @@ export let staggeredENG = [
             code: "KeyA"
         },
         {
+            key: ["O", "o"],
+            code: "KeyO"
+        },
+        {
+            key: ["E","e"],
+            code: "KeyE"
+        },
+        {
+            key: ["U", "u"],
+            code: "KeyU",
+            homing: true
+        },
+        {
+            key: ["I", "i"],
+            code: "KeyI"
+        },
+        {
+            key: ["D", "d"],
+            code: "KeyD"
+        },
+        {
+            key: ["H", "h"],
+            code: "KeyH",
+            homing: true
+        },
+        {
+            key: ["T", "t"],
+            code: "KeyT"
+        },
+        {
+            key: ["N", "n"],
+            code: "KeyN"
+        },
+        {
             key: ["S", "s"],
             code: "KeyS"
         },
         {
-            key: ["D","d"],
-            code: "KeyD"
-        },
-        {
-            key: ["F", "f"],
-            code: "KeyF",
-            homing: true
-        },
-        {
-            key: ["G", "g"],
-            code: "KeyG"
-        },
-        {
-            key: ["H", "h"],
-            code: "KeyH"
-        },
-        {
-            key: ["J", "j"],
-            code: "KeyJ",
-            homing: true
-        },
-        {
-            key: ["K", "k"],
-            code: "KeyK"
-        },
-        {
-            key: ["L", "l"],
-            code: "KeyL"
-        },
-        {
-            key: [":", ";"],
-            code: "Semicolon"
-        },
-        {
-            key: ['"', "'"],
-            code: "Quote"
+            key: ["_", "-"],
+            code: "Minus"
         },
         {
             key: ["Enter"],
@@ -188,44 +188,44 @@ export let staggeredENG = [
             size: 2.25
         },
         {
-            key: ["Z", "z"],
-            code: "KeyZ"
+            key: [":", ";"],
+            code: "Semicolon"
+        },
+        {
+            key: ["Q", "q"],
+            code: "KeyQ"
+        },
+        {
+            key: ["J", "j"],
+            code: "KeyJ"
+        },
+        {
+            key: ["K", "k"],
+            code: "KeyK"
         },
         {
             key: ["X", "x"],
             code: "KeyX"
         },
         {
-            key: ["C", "c"],
-            code: "KeyC"
-        },
-        {
-            key: ["V", "v"],
-            code: "KeyV"
-        },
-        {
             key: ["B", "b"],
             code: "KeyB"
-        },
-        {
-            key: ["N", "n"],
-            code: "KeyN"
         },
         {
             key: ["M", "m"],
             code: "KeyM"
         },
         {
-            key: ["<", ","],
-            code: "Comma"
+            key: ["W", "w"],
+            code: "KeyW"
         },
         {
-            key: [">", "."],
-            code: "Period"
+            key: ["V", "v"],
+            code: "KeyV"
         },
         {
-            key: ["?", "/"],
-            code: "Slash"
+            key: ["Z", "z"],
+            code: "KeyZ"
         },
         {
             key: ["Shift"],
@@ -277,7 +277,7 @@ export let staggeredENG = [
     ],
 ];
 
-export let matrix = [
+export let matrixDvorak = [
     [
         {
             key: ["`", "~"],
@@ -309,7 +309,7 @@ export let matrix = [
         },
         {
             key: ["&", "7"],
-            code: "DIgit7"
+            code: "Digit7"
         },
         {
             key: ["*", "8"],
@@ -336,44 +336,44 @@ export let matrix = [
             size: 1
         },
         {
-            key: ["Q"],
-            code: "KeyQ"
+            key: ['"'],
+            code: "Quote"
         },
         {
-            key: ["W"],
-            code: "KeyW"
+            key: ["<"],
+            code: "Comma"
         },
         {
-            key: ["E"],
-            code: "KeyE"
+            key: [">"],
+            code: "Period"
         },
         {
-            key: ["R"],
-            code: "KeyR"
-        },
-        {
-            key: ["T"],
-            code: "KeyT"
+            key: ["P"],
+            code: "KeyP"
         },
         {
             key: ["Y"],
             code: "KeyY"
         },
         {
-            key: ["U"],
-            code: "KeyU"
+            key: ["F"],
+            code: "KeyF"
         },
         {
-            key: ["I"],
-            code: "KeyI"
+            key: ["G"],
+            code: "KeyG"
         },
         {
-            key: ["O"],
-            code: "KeyO"
+            key: ["C"],
+            code: "KeyC"
         },
         {
-            key: ["P"],
-            code: "KeyP"
+            key: ["R"],
+            code: "KeyR"
+        },
+        {
+            key: ["L"],
+            code: "KeyL"
         },
         {
             key: ["|", "\\"],
@@ -392,42 +392,42 @@ export let matrix = [
             code: "KeyA"
         },
         {
-            key: ["S"],
-            code: "KeyS"
+            key: ["O"],
+            code: "KeyO"
+        },
+        {
+            key: ["E"],
+            code: "KeyE"
+        },
+        {
+            key: ["U"],
+            code: "KeyU",
+            homing: true
+        },
+        {
+            key: ["I"],
+            code: "KeyI"
         },
         {
             key: ["D"],
             code: "KeyD"
         },
         {
-            key: ["F"],
-            code: "KeyF",
-            homing: true
-        },
-        {
-            key: ["G"],
-            code: "KeyG"
-        },
-        {
             key: ["H"],
-            code: "KeyH"
-        },
-        {
-            key: ["J"],
-            code: "KeyJ",
+            code: "KeyH",
             homing: true
         },
         {
-            key: ["K"],
-            code: "KeyK"
+            key: ["T"],
+            code: "KeyT"
         },
         {
-            key: ["L"],
-            code: "KeyL"
+            key: ["N"],
+            code: "KeyN"
         },
         {
-            key: [":", ";"],
-            code: "Semicolon"
+            key: ["S"],
+            code: "KeyS"
         },
         {
             key: ["Entr"],
@@ -442,44 +442,44 @@ export let matrix = [
             size: 1
         },
         {
-            key: ["Z"],
-            code: "KeyZ"
+            key: [":"],
+            code: "Semicolon"
+        },
+        {
+            key: ["Q"],
+            code: "KeyQ"
+        },
+        {
+            key: ["J"],
+            code: "KeyJ"
+        },
+        {
+            key: ["K"],
+            code: "KeyK"
         },
         {
             key: ["X"],
             code: "KeyX"
         },
         {
-            key: ["C"],
-            code: "KeyC"
-        },
-        {
-            key: ["V"],
-            code: "KeyV"
-        },
-        {
             key: ["B"],
             code: "KeyB"
-        },
-        {
-            key: ["N"],
-            code: "KeyN"
         },
         {
             key: ["M"],
             code: "KeyM"
         },
         {
-            key: ["<", ","],
-            code: "Comma"
+            key: ["W"],
+            code: "KeyW"
         },
         {
-            key: [">", "."],
-            code: "Period"
+            key: ["V"],
+            code: "KeyV"
         },
         {
-            key: ["?", "/"],
-            code: "Slash"
+            key: ["Z"],
+            code: "KeyZ"
         },
         {
             key: ["Shft"],

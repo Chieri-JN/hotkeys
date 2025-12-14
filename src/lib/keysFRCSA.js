@@ -1,9 +1,9 @@
-// Taken from https://github.com/monkeytypegame/monkeytype-fingermap/blob/master/script/layouts.js
+// Canadian French CSA keyboard layout
 
-export let staggeredENG = [
+export let staggeredFRCSA = [
     [
         {
-            key: ["`", "~"],
+            key: ["|", "#"],
             code: "Backquote"
         },
         {
@@ -11,11 +11,11 @@ export let staggeredENG = [
             code: "Digit1"
         },
         {
-            key: ["@", "2"],
+            key: ['"', "2"],
             code: "Digit2"
         },
         {
-            key: ["#", "3"],
+            key: ["/", "3"],
             code: "Digit3"
         },
         {
@@ -27,7 +27,7 @@ export let staggeredENG = [
             code: "Digit5"
         },
         {
-            key: ["^", "6"],
+            key: ["?", "6"],
             code: "Digit6"
         },
         {
@@ -110,15 +110,15 @@ export let staggeredENG = [
             code: "KeyP"
         },
         {
-            key: ["{", "["],
+            key: ["{", "^"],
             code: "BracketLeft"
         },
         {
-            key: ["}", "]"],
+            key: ["}", "¸"],
             code: "BracketRight"
         },
         {
-            key: ["|", "\\"],
+            key: [">", "<"],
             code: "Backslash",
             size: 1.5
         }
@@ -172,7 +172,7 @@ export let staggeredENG = [
             code: "Semicolon"
         },
         {
-            key: ['"', "'"],
+            key: ["~", "`"],
             code: "Quote"
         },
         {
@@ -216,15 +216,15 @@ export let staggeredENG = [
             code: "KeyM"
         },
         {
-            key: ["<", ","],
+            key: ["'", ","],
             code: "Comma"
         },
         {
-            key: [">", "."],
+            key: ['"', "."],
             code: "Period"
         },
         {
-            key: ["?", "/"],
+            key: ["É", "é"],
             code: "Slash"
         },
         {
@@ -280,7 +280,7 @@ export let staggeredENG = [
 export let matrix = [
     [
         {
-            key: ["`", "~"],
+            key: ["|", "#"],
             code: "Backquote"
         },
         {
@@ -288,11 +288,11 @@ export let matrix = [
             code: "Digit1"
         },
         {
-            key: ["@", "2"],
+            key: ['"', "2"],
             code: "Digit2"
         },
         {
-            key: ["#", "3"],
+            key: ["/", "3"],
             code: "Digit3"
         },
         {
@@ -304,12 +304,12 @@ export let matrix = [
             code: "Digit5"
         },
         {
-            key: ["^", "6"],
+            key: ["?", "6"],
             code: "Digit6"
         },
         {
             key: ["&", "7"],
-            code: "DIgit7"
+            code: "Digit7"
         },
         {
             key: ["*", "8"],
@@ -376,7 +376,7 @@ export let matrix = [
             code: "KeyP"
         },
         {
-            key: ["|", "\\"],
+            key: [">", "<"],
             code: "Backslash",
             size: 1
         }
@@ -470,15 +470,15 @@ export let matrix = [
             code: "KeyM"
         },
         {
-            key: ["<", ","],
+            key: ["'", ","],
             code: "Comma"
         },
         {
-            key: [">", "."],
+            key: ['"', "."],
             code: "Period"
         },
         {
-            key: ["?", "/"],
+            key: ["É", "é"],
             code: "Slash"
         },
         {

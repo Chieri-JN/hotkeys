@@ -1,14 +1,36 @@
 <script lang="ts">
-    import { staggered } from "./keysENG";
+    import { staggeredENG } from "./keysENG";
+    import { staggeredFR } from "./keysFR";
+    import { staggeredFRCSA } from "./keysFRCSA";
+    import { staggeredDvorak } from "./keysDvorak";
+    import { staggeredLetters } from "./keysLetters";
+
     import Key from "$lib/Key.svelte";
     import { cooldowns, customKeyDimensions,emptyData } from "./constants";
     import type {textData, keyType} from "./types";
-    let {name="", data=emptyData, selectKeys=undefined, isStatic=false, boardDims=70, allowCooling=false} :
-        { name: string,  data : textData, selectKeys ?: (keys : keyType []) => void, isStatic :boolean, boardDims:number, allowCooling:boolean} = $props()
+    let {name="", data=emptyData, selectKeys=undefined, isStatic=false, boardDims=70, allowCooling=false, specialKeys="none"} :
+        { name: string,  data : textData, selectKeys ?: (keys : keyType []) => void, isStatic :boolean, boardDims:number, allowCooling:boolean, specialKeys:string} = $props()
 
     let shiftPressed = false
     let selectedKeys : keyType [] = $state(new Array(3))
     let keyDimensions = customKeyDimensions(boardDims)
+
+    let getStaggered = (name: string) => {
+        if (name === "qwerty") return staggeredENG;
+        if (name === "azerty") return staggeredFR;
+        if (name === "french-csa") return staggeredFRCSA;
+        if (name === "dvorak") return staggeredDvorak;
+        if (name === "letters") return staggeredLetters;
+        return staggeredENG;
+    }
+
+    let isSpecial = (code: string) => {
+        if (specialKeys === "none") return false;
+        if (specialKeys === "all") return true;
+        if (specialKeys === "count") return data.keyFreq[code] > 0;
+        return false;
+    }
+    let staggered = getStaggered(name);
 
     let rowWidths = staggered.map( row => row.reduce((sum, key) => sum + keyDimensions.w * (key.size ?? 1), 0));
     const maxRowWidth = Math.max(...rowWidths) + boardDims/2;
@@ -77,6 +99,7 @@
                          dims={boardDims}
                          allowCooling={allowCooling}
                          count={data.keyFreq[key.code] ?? 0}
+                         isSpecial={isSpecial(key.code)}
                      />
                   </div>
             {/each}
