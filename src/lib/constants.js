@@ -5,6 +5,7 @@ import {staggeredFR} from "$lib/layouts/keysFR.js";
 import {staggeredFRCSA} from "$lib/layouts/keysFRCSA.js";
 import {staggeredDvorak} from "$lib/layouts/keysDvorak.js";
 import {staggeredLetters} from "$lib/layouts/keysLetters.js";
+import {staggeredAZERTY} from "$lib/layouts/keysAZERTY.js";
 
 export const cooldowns = {
     one : 0.0007,
@@ -39,7 +40,8 @@ export const getStaggered = (name) => {
     if (name === "azerty") return staggeredFR;
     if (name === "french-csa") return staggeredFRCSA;
     if (name === "dvorak") return staggeredDvorak;
-    if (name === "letters") return staggeredLetters;
+    if (name === "lettersENG") return staggeredLetters;
+    if (name === "lettersAZERTY") return staggeredAZERTY;
     return staggeredENG;
 }
 
@@ -57,7 +59,8 @@ const rMax = 100
 const getScale = (d) => Math.log10(d + 1)
 const getScale2 = (d) => Math.sqrt(d)
 const getScale3 = (d) => Math.pow(d, 5/7)
-export const getColour = (k, d, vMax=rMax) =>
+const getScale4 = (d) => Math.pow(d, 3/5)
+export const getColour = (k, d, vMax=rMax, f=3) =>
 {
     if (k === 1) {
         return getColour2(d, vMax)
@@ -74,9 +77,10 @@ export const getColour = (k, d, vMax=rMax) =>
     } else if (k === 7) {
         return getColour7(d, vMax)
     } else if (k === 8) {
-        return d === 1 ? "#fd4a1e" : d === 2 ? "#2c7da0" : "white"
+        console.log("D", d)
+        return d === 1 ? "#5ba3c5" : f === 2 && d!==0?  getColour8(d, vMax) : "white"
     } else if (k === 9) {
-            return d === 1 ? "#fd4a1e" : d === 2 ?  "#fd861e": d === 3 ? "#2c7da0":  "white"
+            return d === 1 ? "#5ba3c5" : d === 2 ?  "#a8d5e2": f === 3 && d!==0 ? getColour8(d, vMax):  "white"
     } else  {
         return getSpecial(d, vMax)
     }
@@ -87,7 +91,7 @@ const colRange2 = d3.interpolateRgbBasis(["white", "#fd861e","#fd4a1e", "#cc0b0b
 const colRange3 = (t) => d3.interpolateYlOrRd(t)
 const colRange4 = (t) => d3.interpolateOrRd(t)
 const colRange5 = (t) => d3.interpolateReds(t)
-const colRange6 = (t) => d3.interpolatePuRd(t)
+const colRange6 = (t) => d3.interpolateYlGnBu(t)
 const colRange7 = (t) => d3.interpolateGreys(t)
 
 const colRangeSpecial = d3.interpolateRgbBasis(["#e8f4f8", "#a8d5e2", "#5ba3c5", "#2c7da0", "#014f86"])
@@ -141,6 +145,15 @@ const getColour7 = (d, vMax=rMax) => {
         .clamp(true)
         (getScale2(d))
     }
+
+
+const getColour8 = (d, vMax=rMax) => {
+    return d3.scaleSequential(colRange2)
+        .domain([getScale4(rMin), getScale4(vMax)])
+        .clamp(true)
+        (getScale4(d))
+    }
+    
 
 
 function simulateKeypressEvents(str) {

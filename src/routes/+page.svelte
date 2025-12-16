@@ -1,7 +1,7 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
     // Data 
-    import { qwertyData, azertyData, engWikiData, frWikiData, engBigrams, frBigrams, dataBuilder} from "../lib/dataConstants"
+    import { qwertyData, azertyData, engWikiData, frWikiData, engBigrams, frBigrams, dataBuilder, engTrigrams, frTrigrams} from "../lib/dataConstants"
 
     // Constants / helpers
     import {fillerKeyType, views} from "../lib/constants.js"
@@ -18,13 +18,13 @@
     import NetworkGraph from "$lib/NetworkGraph.svelte";
     import Heatmap from "$lib/Heatmap.svelte";
 
+    import type { Trigram } from "$lib/types";
+    import type { Bigram } from "$lib/types";
 
     let selectedView = $state("live");
     let isStatic = $state(false);
     let allowCooling = $state(false);
     let selectedKeys = $state([fillerKeyType, fillerKeyType, fillerKeyType]);
-    // let selectedKeyData = $state()
-
     function selectedKey (keys : keyType[]) {
         // selectedChar = key.char
         selectedKeys = keys
@@ -35,52 +35,45 @@
     let loadedData  = $state(null);
     let narrative = $state(true) // TODO : CHANGE BACK TO FALSE
     let firstBoardDims = 25;
+    let secondBoardDims = 50;
     let selectedBigLang = $state("eng");
     let selectedBigramData = $state(engBigrams);
     let chosentFirstBi = $state("");
     let chosenSecondBi = $state("");
+    let relevantBigrams = $derived(
+        chosentFirstBi 
+            ? selectedBigramData.filter(bg => bg.first === chosentFirstBi).sort((a, b) => b.freq - a.freq).slice(0, 10)
+            : []
+    );
+    let highlightedBigramData = $derived.by(() => {
+        if (!chosentFirstBi) {
+            return dataBuilder({});
+        }
+
+        const keyMap: Record<string, number> = {
+            [charToKeys[chosentFirstBi]?.code || ""]: 1
+        };
+        
+        relevantBigrams.forEach(bg => {
+            const secondKeyCode = charToKeys[bg.second]?.code;
+            if (secondKeyCode && secondKeyCode !== charToKeys[chosentFirstBi]?.code) {
+                keyMap[secondKeyCode] = bg.freq;
+            }
+        });
+        
+        return dataBuilder(keyMap);
+    })
 
     function handleClickBigram(code: string, char: string) {
         if (chosentFirstBi !== char.toUpperCase()) {
             chosentFirstBi = char.toUpperCase();
-        // } else if (chosenSecondBi === "") {
-        //     chosenSecondBi =  char.toUpperCase();
         } else if (chosentFirstBi === char.toUpperCase()) {
             chosentFirstBi = "";
-        
-         
-        // } else if (chosenSecondBi === char.toUpperCase()) {
-        //     chosenSecondBi = "";
-        // } else {
-        //     chosentFirstBi = char.toUpperCase();
-        //     chosenSecondBi = "";
+
         }
     }
 
-    
-
-    let chosentFirstTri = $state("");
-    let chosenSecondTri = $state("");
-    let chosenThirdTri = $state("");
-
-    function handleClickTrigram(code: string, char: string) {
-        if (chosentFirstTri === "") {
-            chosentFirstTri = char.toUpperCase();
-        } else if (chosenSecondTri === "") {
-            chosenSecondTri =  char.toUpperCase();
-        } else if (chosentFirstTri === char.toUpperCase()) {
-            chosentFirstTri = "";
-        
-         
-        } else if (chosenSecondTri === char.toUpperCase()) {
-            chosenSecondTri = "";
-        } else {
-            chosentFirstTri = char.toUpperCase();
-            chosenSecondTri = "";
-        }
-    }
-
-    function handleChange (event) {
+    function handleChangeBigram (event) {
         const value = event.target.value;
         selectedBigLang = value;
         if (selectedBigLang === "eng") {
@@ -89,7 +82,66 @@
             selectedBigramData = frBigrams;
         }
     }
+    
+    let selectedTrigLang = $state("eng");
+    let selectedTrigramData = $state(engTrigrams);
+    let chosenFirstTri = $state("");
+    let chosenSecondTri = $state("");
+    let chosenThirdTri = $state("");
 
+    function handleClickTrigram(code: string, char: string) {
+        if (chosenFirstTri === "") {
+            chosenFirstTri = char.toUpperCase();
+        } else if (chosenSecondTri === "") {
+            
+            chosenSecondTri =  char.toUpperCase();
+        } else if (chosenSecondTri === char.toUpperCase()) {
+            chosenSecondTri = "";
+        } else if (chosenFirstTri === char.toUpperCase()) {
+            chosenSecondTri = chosenFirstTri;
+            chosenFirstTri = "";
+        
+        } else {
+            chosenFirstTri = char.toUpperCase();
+            chosenSecondTri = "";
+        }
+    }
+
+    let relevantTrigrams = $derived(
+        (chosenFirstTri && chosenSecondTri)
+            ? selectedTrigramData.filter(tri => tri.first === chosenFirstTri && tri.second === chosenSecondTri).sort((a, b) => b.freq - a.freq).slice(0, 50)
+            : []
+    );
+    let highlightedTrigramData = $derived.by(() => {
+        if (!chosenFirstTri || !chosenSecondTri) {
+            return dataBuilder({[charToKeys[chosenFirstTri]?.code || ""]: 1, [charToKeys[chosenSecondTri]?.code || ""]: 2});
+        }
+        
+        const keyMap: Record<string, number> = {
+            [charToKeys[chosenFirstTri]?.code || ""]: 1,
+            [charToKeys[chosenSecondTri]?.code || ""]: 2
+        };
+        
+        relevantTrigrams.forEach(tri => {
+            const thirdKeyCode = charToKeys[tri.third]?.code;
+            if (thirdKeyCode && thirdKeyCode !== charToKeys[chosenFirstTri]?.code && thirdKeyCode !== charToKeys[chosenSecondTri]?.code) {
+                keyMap[thirdKeyCode] = tri.freq;
+            }
+        });
+
+        return dataBuilder(keyMap);
+    }) 
+    
+    
+    function handleChangeTrigram (event) {
+        const value = event.target.value;
+        selectedTrigLang = value;
+        if (selectedTrigLang === "eng") {
+            selectedTrigramData = engTrigrams;
+        } else {
+            selectedTrigramData = frTrigrams;
+        }
+    }
 </script>
 {#if !narrative}
     <div class="StartView">
@@ -150,50 +202,98 @@
         <h1>Grouping the Characters</h1>
         <div>
             <div>
-                <h2>Bigrams</h2>
-                <div class='labels'>
+                <h2>Bigram Prefix: {chosentFirstBi}</h2>
+                <button onclick={() => {chosentFirstBi = ""}}>Clear</button>
+                <div class='Bilabels'>
                     <label>
-                        <input type="radio" name="lang" value="eng" onchange={handleChange} checked={selectedBigLang === "eng"}/>
+                        <input type="radio" name="bi" value="eng" onchange={handleChangeBigram} checked={selectedBigLang === "eng"}/>
                         <p2>English Bigrams</p2>
                     </label>
                     
                     <label>
-                        <input type="radio" name="lang" value="fr" onchange={handleChange} />
+                        <input type="radio" name="bi" value="fr" onchange={handleChangeBigram} />
                         <p2>French Bigrams</p2>
                     </label> 
                 </div>
                 
                 <Bipartite data={selectedBigramData} lang={selectedBigLang} chosentFirstBi={chosentFirstBi} chosenSecondBi={chosenSecondBi}/>
+                {#if selectedBigLang === "fr"}
+                    <Keyboard 
+                        name={"lettersAZERTY"} 
+                        selectKeys={selectedKey} 
+                        isStatic={true} 
+                        data={highlightedBigramData} 
+                        boardDims={secondBoardDims} 
+                        specialKeys="none" 
+                        colourCode={8} 
+                        secondaryColourCode={2}
+                        clickOn={true}
+                        interaction={false}
+                        onClick={handleClickBigram}
+
+                        />
+                {:else}
                 <Keyboard 
-                    name={"letters"} 
+                    name={"lettersENG"} 
                     selectKeys={selectedKey} 
                     isStatic={true} 
-                    data={dataBuilder({[charToKeys[chosentFirstBi]?.code || ""]: 1, [charToKeys[chosenSecondBi]?.code || ""]: 2})} 
-                    boardDims={50} 
-                    specialKeys="count" 
+                    data={highlightedBigramData} 
+                    boardDims={secondBoardDims} 
+                    specialKeys="none" 
                     colourCode={8} 
+                    secondaryColourCode={2}
                     clickOn={true}
                     interaction={false}
                     onClick={handleClickBigram}
 
                     />
+                {/if}
             </div>
             
             <div>
-                <h2>Trigrams</h2>  
-                <Tripartite chosentFirstTri={chosentFirstTri} chosenSecondTri={chosenSecondTri} chosenThirdTri={chosenThirdTri}/>
-                <Keyboard name={"letters"} 
-                    selectKeys={selectedKey} 
-                    isStatic={true} 
-                    data={dataBuilder({[charToKeys[chosentFirstTri]?.code || ""]: 1, [charToKeys[chosenSecondTri]?.code || ""]: 2, [charToKeys[chosenThirdTri]?.code || ""]: 3})} 
-                    boardDims={30} 
-                    specialKeys="count" 
-                    colourCode={9} 
-                    clickOn={true}
-                    interaction={false}
-                    onClick={handleClickTrigram}
+                <h2>Trigram Prefix: {chosenFirstTri + chosenSecondTri}</h2>   
+                <button onclick={() => {chosenFirstTri = ""; chosenSecondTri = ""; chosenThirdTri = "";}}>Clear</button>
+                <div class='Trilabels'>
+                    <label>
+                        <input type="radio" name="tri" value="eng" onchange={handleChangeTrigram} checked={selectedTrigLang === "eng"}/>
+                        <p2>English Trigrams</p2>
+                    </label>
+                    
+                    <label>
+                        <input type="radio" name="tri" value="fr" onchange={handleChangeTrigram} />
+                        <p2>French Trigrams</p2>
+                    </label> 
+                </div>
+                <Tripartite data={selectedTrigramData} lang={selectedTrigLang} chosenFirstTri={chosenFirstTri} chosenSecondTri={chosenSecondTri} chosenThirdTri={chosenThirdTri}/>
+                {#if selectedTrigLang === "fr"}
+                    <Keyboard name={"lettersAZERTY"} 
+                        selectKeys={selectedKey} 
+                        isStatic={true} 
+                        data={highlightedTrigramData} 
+                        boardDims={secondBoardDims} 
+                        specialKeys="none" 
+                        colourCode={9} 
+                        secondaryColourCode={3}
+                        clickOn={true}
+                        interaction={false}
+                        onClick={handleClickTrigram}
 
-                    />
+                        />
+                {:else}
+                    <Keyboard name={"lettersENG"} 
+                        selectKeys={selectedKey} 
+                        isStatic={true} 
+                        data={highlightedTrigramData} 
+                        boardDims={secondBoardDims} 
+                        specialKeys="none" 
+                        colourCode={9} 
+                        secondaryColourCode={3}
+                        clickOn={true}
+                        interaction={false}
+                        onClick={handleClickTrigram}
+
+                        />
+                {/if}
             </div>
             <!--   Network graph  -->
 <!--            <div>-->
@@ -203,23 +303,23 @@
         </div>
     </div>
 
-    <div>
+<!--    <div>-->
 
-        <h1>Put together</h1>
-        <div>
-            <h2>Trajectories</h2>
-            <NetworkGraph />
-        </div>
-        <div>
-            <h2>Typing Bigrams</h2>
-<!--            SLIDER FOR FREQUENCY of BIGRAM..... -->
-<!--            <div class="sliderSpace">&ndash;&gt;-->
-<!--                        <input class="timeSlider" type="range" name="slider" min="0" max="100" >-->
-<!--                    </div>-->
-            <Heatmap />
-<!--            HEAT MAP + Keyboard + bigram 2 coord-->
-        </div>
-    </div>
+<!--        <h1>Put together</h1>-->
+<!--        <div>-->
+<!--            <h2>Trajectories</h2>-->
+<!--            <NetworkGraph />-->
+<!--        </div>-->
+<!--        <div>-->
+<!--            <h2>Typing Bigrams</h2>-->
+<!--&lt;!&ndash;            SLIDER FOR FREQUENCY of BIGRAM..... &ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="sliderSpace">&ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;                        <input class="timeSlider" type="range" name="slider" min="0" max="100" >&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--            <Heatmap />-->
+<!--&lt;!&ndash;            HEAT MAP + Keyboard + bigram 2 coord&ndash;&gt;-->
+<!--        </div>-->
+<!--    </div>-->
 
 {/if}
 

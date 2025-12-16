@@ -9,6 +9,7 @@
         code,
         clickOn=false,
         colourCode=1,
+        secondaryColourCode=3,
         count=0,
         freq =0,
         isStatic=false,
@@ -27,6 +28,7 @@
             code : string,
             clickOn : boolean,
             colourCode : number
+            secondaryColourCode : number,
             count : number,
             freq : number
             isStatic:boolean,
@@ -106,7 +108,7 @@
         .attr("height", keyDimensions.h)
         .attr("rx", 6)
         .attr("ry", 6)
-        .attr  ("fill", getColour(colourCode, count, maxVal))
+        .attr  ("fill", getColour(colourCode, count, maxVal, secondaryColourCode))
         .attr("stroke", "#111111")
         .attr("stroke-width", 1)
         .style("border-radius", "5px")
@@ -190,7 +192,7 @@
     }
 
     function updateKey() {
-        if (rectElem) rectElem.attr("fill", getColour(colourCode, count, maxVal));
+        if (rectElem) rectElem.attr("fill", getColour(colourCode, count, maxVal, secondaryColourCode));
         if (textElem) textElem.text(Math.round(count));
         //
 

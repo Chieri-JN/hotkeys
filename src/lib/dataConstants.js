@@ -27,22 +27,27 @@ engBigrams.sort((a, b) =>  a.freq - b.freq);
 export const frBigrams = Object.entries(frenchBigram).map(([bg, count]) => ({bi : bg, first: bg[0], second: bg[1], freq : count }));
 frBigrams.sort((a, b) =>  a.freq - b.freq);
 // Trigrams
-export const emptyTrigrams = {bi : "", first: "", second: "", third: "", freq : 0}
-const engTrigam = Object.entries(englishTrigam).map(([bg, count]) => ({
-    bi : bg,
-    first: bg[0],
-    second: bg[1],
-    third : bg[2],
-    freq : count
-}));
+export const emptyTrigrams = {tri : "", first: "", second: "", third: "", freq : 0}
+export const engTrigrams = Object.entries(englishTrigam)
+    .slice(0, 1200)  // Take top 1200 most frequent trigrams cause there are so many of them lol
+    .map(([bg, count]) => ({
+        bi : bg,
+        first: bg[0],
+        second: bg[1],
+        third : bg[2],
+        freq : count
+    }));
+engTrigrams.sort((a, b) =>  a.freq - b.freq);
 
-const frTrigram = Object.entries(frenchTrigam).map(([bg, count]) => ({
-    bi : bg,
-    first: bg[0],
-    second: bg[1],
-    third : bg[2],
-    freq : count
-}));
-
+export const frTrigrams = Object.entries(frenchTrigam)
+    .slice(0, 1200)  // Take top 1200
+    .map(([bg, count]) => ({
+        bi : bg,
+        first: bg[0],
+        second: bg[1],
+        third : bg[2],
+        freq : count
+    }));
+frTrigrams.sort((a, b) =>  a.freq - b.freq);
 // Eng words
 

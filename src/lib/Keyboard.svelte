@@ -17,6 +17,7 @@
         specialKeys="none",
         interaction=false, 
         colourCode=1, 
+        secondaryColourCode=3,
         clickOn=false,
         onClick=undefined} :
         { name: string,  data : textData, 
@@ -27,6 +28,7 @@
             interaction:boolean, 
             colourCode : number, 
             clickOn : boolean,
+            secondaryColourCode : number,
             onClick ?: (code: string, char: string) => void} = $props()
 
     let shiftPressed = false
@@ -49,7 +51,7 @@
     let rowPaddings: number[] = $state([]);
     let maxRowWidth: number = $state(0);
 
-    if (name !== "letters") {
+    if (name !== "lettersENG" && name !== "lettersAZERTY") {
         rowWidths = staggered.map( row => row.reduce((sum, key) => sum + keyDimensions.w * (key.size ?? 1), 0) as number);
         maxRowWidth = Math.max(...rowWidths) + boardDims/2;
         rowGaps = staggered.map((row, i) => {
@@ -153,6 +155,7 @@
                          freq={(((data.keyFreq[key.code] ?? 0) / totalCount)*100).toFixed(2)}
                          maxVal={maxCount}
                          colourCode={colourCode}
+                         secondaryColourCode={secondaryColourCode}
                          isSpecial={isSpecial(key.code)}
                      />
                   </div>

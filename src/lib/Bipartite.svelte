@@ -24,7 +24,7 @@
         const minFreq = d3.min(data, d => d.freq) || 1;
         
         const width = 800;
-        const height = keys.length * 140;
+        const height = keys.length * 160;
         const marginTop = 40;
         const marginRight = 10;
         const marginBottom = 40;
@@ -62,13 +62,14 @@
         // Append the lines
         svg.append("g")
             .attr("fill", "none")
+            // .attr("stroke-width", 1.5)
             .selectAll("path")
             .data(data.filter(d => d.freq > 0))
             .join("path")
-            .attr("stroke-width", d => chosentFirstBi === "" ? 1.5 : d.first === chosentFirstBi ? 2.5 : 1)
+            .attr("stroke-width", d => chosentFirstBi === "" ? 1.5 : d.first === chosentFirstBi ? 2.5 : 1.5)
             .attr("stroke-opacity", d => chosentFirstBi === "" ? 0.8 : d.first === chosentFirstBi ? 1 : 0.15)
             .attr("stroke", d =>  chosentFirstBi === "" ? getColour(lang === "eng" ? 5 : 6, d.freq, maxFreq) : 
-                d.first === chosentFirstBi ? getColour(lang === "eng" ? 5 : 6, d.freq, maxFreq) : getColour(7, d.freq, maxFreq)
+                d.first === chosentFirstBi ? getColour(lang === "eng" ? 5 : 6, d.freq+maxFreq/7, maxFreq) : getColour(7, d.freq, maxFreq)
             )
             .attr("d", d => line([
                 ["first", d.first],
