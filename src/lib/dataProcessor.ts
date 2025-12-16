@@ -57,7 +57,7 @@ async function parseFile(file : File) {
 
 
 
-// Created using LLM magic
+// Created using LLM 
 export const charToKeys: Record<string, keyType> = {
     // Letters
     "a": { code: "KeyA" },

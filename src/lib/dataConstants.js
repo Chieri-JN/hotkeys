@@ -11,19 +11,23 @@ export const emptyData = {text: "", words : [""], freq:{"" : 0}, keyFreq: {"" : 
 export const sampleData = parseString(text1)
 export const qwertyData = {text: "", words : [""], freq:{"" : 0}, keyFreq: {"KeyQ" : 20, "KeyW" : 20, "KeyE" : 20, "KeyR" : 20, "KeyT" : 20, "KeyY" : 20}}
 export const azertyData = {text: "", words : [""], freq:{"" : 0}, keyFreq: {"KeyA" : 20, "KeyZ" : 20, "KeyE" : 20, "KeyR" : 20, "KeyT" : 20, "KeyY" : 20}}
+export const dataBuilder = (d) => ({text: "", words : [""], freq:{"" : 0}, keyFreq: d, totalFreq: 0})
 
 // Wiki data
-export const engWikiData = {text: "", words : [""], freq : {"" : 0}, keyFreq: wikiDataEng};
+export const engWikiData = {text: "", words : [""], freq : {"" : 0}, keyFreq: wikiDataEng, totalFreq : 0};
 engWikiData.totalFreq = Object.entries(wikiDataEng).reduce((z, [chr, cnt]) => z + cnt, 0)
-export const frWikiData = {text: "", words : [""], freq : {"" : 0}, keyFreq: wikiDataFr};
+export const frWikiData = {text: "", words : [""], freq : {"" : 0}, keyFreq: wikiDataFr, totalFreq : 0};
 frWikiData.totalFreq = Object.entries(wikiDataFr).reduce((z, [chr, cnt]) => z + cnt, 0)
 
 
 // Bigrams
+export const emptyBigrams = {bi : "", first: "", second: "", freq : 0}
 export const engBigrams = Object.entries(englishBigram).map(([bg, count]) => ({bi : bg, first: bg[0], second: bg[1], freq : count}));
-export const frBigram = Object.entries(frenchBigram).map(([bg, count]) => ({bi : bg, first: bg[0], second: bg[1], freq : count }));
-
+engBigrams.sort((a, b) =>  a.freq - b.freq);
+export const frBigrams = Object.entries(frenchBigram).map(([bg, count]) => ({bi : bg, first: bg[0], second: bg[1], freq : count }));
+frBigrams.sort((a, b) =>  a.freq - b.freq);
 // Trigrams
+export const emptyTrigrams = {bi : "", first: "", second: "", third: "", freq : 0}
 const engTrigam = Object.entries(englishTrigam).map(([bg, count]) => ({
     bi : bg,
     first: bg[0],

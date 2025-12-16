@@ -57,36 +57,90 @@ const rMax = 100
 const getScale = (d) => Math.log10(d + 1)
 const getScale2 = (d) => Math.sqrt(d)
 const getScale3 = (d) => Math.pow(d, 5/7)
-export const getColour = d3.scaleLinear()
-    .range(["white", "#bd0101"])
-    .domain([rMin,rMax])
-    .clamp(true)
+export const getColour = (k, d, vMax=rMax) =>
+{
+    if (k === 1) {
+        return getColour2(d, vMax)
+    } else if (k === 2) {
+        return getColour3(d, vMax)
+    }  else if (k === 3) {
+        return getColour4(d, vMax)
+    }  else if (k === 4) {
+        return  d === 0 ? "white" : "#fd4a1e"
+    } else if (k === 5) {
+        return getColour5(d, vMax)
+    } else if (k === 6) {
+        return getColour6(d, vMax)
+    } else if (k === 7) {
+        return getColour7(d, vMax)
+    } else if (k === 8) {
+        return d === 1 ? "#fd4a1e" : d === 2 ? "#2c7da0" : "white"
+    } else if (k === 9) {
+            return d === 1 ? "#fd4a1e" : d === 2 ?  "#fd861e": d === 3 ? "#2c7da0":  "white"
+    } else  {
+        return getSpecial(d, vMax)
+    }
+
+}
 
 const colRange2 = d3.interpolateRgbBasis(["white", "#fd861e","#fd4a1e", "#cc0b0b"])
 const colRange3 = (t) => d3.interpolateYlOrRd(t)
 const colRange4 = (t) => d3.interpolateOrRd(t)
+const colRange5 = (t) => d3.interpolateReds(t)
+const colRange6 = (t) => d3.interpolatePuRd(t)
+const colRange7 = (t) => d3.interpolateGreys(t)
 
-export const getColour2 = (d, vMax=rMax) => {
+const colRangeSpecial = d3.interpolateRgbBasis(["#e8f4f8", "#a8d5e2", "#5ba3c5", "#2c7da0", "#014f86"])
+
+const getSpecial = (d, vMax=1) => {
+    // Linear scale for special keys (no transformation needed for percentages/small values)
+    return d3.scaleSequential(colRangeSpecial)
+        .domain([0, vMax])
+        .clamp(true)
+        (d)
+}
+
+const getColour2 = (d, vMax=rMax) => {
     return d3.scaleSequential(colRange2)
         .domain([getScale3(rMin),getScale3(vMax)])
         .clamp(true)
         (getScale3(d))
     }
-export const getColour3 = (d, vMax=rMax) => {
+
+const getColour3 = (d, vMax=rMax) => {
     return d3.scaleSequential(colRange3)
         .domain([getScale2(rMin), getScale2(vMax)])
         .clamp(true)
         (getScale2(d))
     }
 
-export const getColour4 = (d, vMax=rMax) => {
-    return d3.scaleSequential(colRange3)
+const getColour4 = (d, vMax=rMax) => {
+    return d3.scaleSequential(colRange4)
         .domain([getScale2(rMin), getScale2(vMax)])
         .clamp(true)
         (getScale2(d))
     }
     
+const getColour5 = (d, vMax=rMax) => {
+    return d3.scaleSequential(colRange5)
+        .domain([getScale3(rMin), getScale3(vMax)])
+        .clamp(true)
+        (getScale3(d))
+    }
 
+const getColour6 = (d, vMax=rMax) => {
+    return d3.scaleSequential(colRange6)
+        .domain([getScale2(rMin), getScale2(vMax)])
+        .clamp(true)
+        (getScale2(d))
+    }
+
+const getColour7 = (d, vMax=rMax) => {
+    return d3.scaleSequential(colRange7)
+        .domain([getScale2(rMin), getScale2(vMax)])
+        .clamp(true)
+        (getScale2(d))
+    }
 
 
 function simulateKeypressEvents(str) {

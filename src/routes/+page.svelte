@@ -1,13 +1,13 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
     // Data 
-    import { qwertyData, azertyData, engWikiData, frWikiData} from "../lib/dataConstants"
+    import { qwertyData, azertyData, engWikiData, frWikiData, engBigrams, frBigrams, dataBuilder} from "../lib/dataConstants"
 
     // Constants / helpers
     import {fillerKeyType, views} from "../lib/constants.js"
     import { showLayout } from "$lib/stores.js";
     import type { keyType } from "../lib/types";
-    import { parseData } from "../lib/dataProcessor.js";
+    import { charToKeys } from "../lib/dataProcessor.js";
     // Components
     import Keyboard from "$lib/Keyboard.svelte";
     import KeyGraph from  "$lib/KeyGraph.svelte"
@@ -23,23 +23,78 @@
     let isStatic = $state(false);
     let allowCooling = $state(false);
     let selectedKeys = $state([fillerKeyType, fillerKeyType, fillerKeyType]);
-
-
+    // let selectedKeyData = $state()
 
     function selectedKey (keys : keyType[]) {
         // selectedChar = key.char
         selectedKeys = keys
     }
+    
+    
 
     let loadedData  = $state(null);
     let narrative = $state(true) // TODO : CHANGE BACK TO FALSE
-    let firstBoardDims = 20;
+    let firstBoardDims = 25;
+    let selectedBigLang = $state("eng");
+    let selectedBigramData = $state(engBigrams);
+    let chosentFirstBi = $state("");
+    let chosenSecondBi = $state("");
+
+    function handleClickBigram(code: string, char: string) {
+        if (chosentFirstBi !== char.toUpperCase()) {
+            chosentFirstBi = char.toUpperCase();
+        // } else if (chosenSecondBi === "") {
+        //     chosenSecondBi =  char.toUpperCase();
+        } else if (chosentFirstBi === char.toUpperCase()) {
+            chosentFirstBi = "";
+        
+         
+        // } else if (chosenSecondBi === char.toUpperCase()) {
+        //     chosenSecondBi = "";
+        // } else {
+        //     chosentFirstBi = char.toUpperCase();
+        //     chosenSecondBi = "";
+        }
+    }
+
+    
+
+    let chosentFirstTri = $state("");
+    let chosenSecondTri = $state("");
+    let chosenThirdTri = $state("");
+
+    function handleClickTrigram(code: string, char: string) {
+        if (chosentFirstTri === "") {
+            chosentFirstTri = char.toUpperCase();
+        } else if (chosenSecondTri === "") {
+            chosenSecondTri =  char.toUpperCase();
+        } else if (chosentFirstTri === char.toUpperCase()) {
+            chosentFirstTri = "";
+        
+         
+        } else if (chosenSecondTri === char.toUpperCase()) {
+            chosenSecondTri = "";
+        } else {
+            chosentFirstTri = char.toUpperCase();
+            chosenSecondTri = "";
+        }
+    }
+
+    function handleChange (event) {
+        const value = event.target.value;
+        selectedBigLang = value;
+        if (selectedBigLang === "eng") {
+            selectedBigramData = engBigrams;
+        } else {
+            selectedBigramData = frBigrams;
+        }
+    }
 
 </script>
 {#if !narrative}
     <div class="StartView">
         <Title weight={1000} isStatic={false} size={10}/>
-        <Key key="Begin" code="Begin" onClick={() => {narrative=true; $showLayout=true}} size={2} dims={100} isStatic={true} onUpdate={() => {}} inKeyboard={false}/>
+        <Key key="Begin" code="Begin" onClick={() => {narrative=true; $showLayout=true}} size={2} dims={100} isStatic={true} onUpdate={() => {}} inKeyboard={false} interaction={true} />
     </div>
 {:else}
     <div>
@@ -50,7 +105,7 @@
                 <p><em>QWERTY</em></p>
             </div>
             <div class="keyboard">
-                <Keyboard name={"qwerty"} selectKeys={selectedKey} isStatic={true} allowCooling={false} data={qwertyData} boardDims={30} specialKeys="count"/>
+                <Keyboard name={"qwerty"} selectKeys={selectedKey} isStatic={true} allowCooling={false} data={qwertyData} boardDims={30} specialKeys="count" colourCode={4}/>
             </div>
             <div class="visHolder">
 
@@ -65,24 +120,28 @@
             <p><em>Freqs</em></p>
 
             <div class="visHolder">
-                <!-- TODO  ADD WIKI DATA-->
-                <div class="keyboard">
-                    <Keyboard name={"qwerty"} selectKeys={selectedKey} isStatic={true} allowCooling={false} data={engWikiData} boardDims={firstBoardDims} specialKeys="count" interaction={true}/>
-                    <p class="subtitle">QWERTY</p>
-                </div>
-                <div class="keyboard">
-                    <Keyboard name={"dvorak"} selectKeys={selectedKey} isStatic={true} allowCooling={false} data={engWikiData} boardDims={firstBoardDims} specialKeys="count" interaction={true}/>
-                    <p class="subtitle">DVORAK</p>
+                <div class="keyboardHolder">
+                    <div class="keyboard">
+                        <Keyboard name={"qwerty"} selectKeys={selectedKey} isStatic={true} allowCooling={false} data={engWikiData} boardDims={firstBoardDims} specialKeys="count" interaction={true}/>
+                        <p class="subtitle">QWERTY</p>
+                    </div>
+                    <div class="keyboard">
+                        <Keyboard name={"dvorak"} selectKeys={selectedKey} isStatic={true} allowCooling={false} data={engWikiData} boardDims={firstBoardDims} specialKeys="count" interaction={true}/>
+                        <p class="subtitle">DVORAK</p>
+                    </div>
                 </div>
 
-                <div class="keyboard">
-                    <Keyboard name={"azerty"} selectKeys={selectedKey} isStatic={true} allowCooling={false} data={frWikiData} boardDims={firstBoardDims} specialKeys="count" interaction={true}/>
-                    <p class="subtitle">AZERTY</p>
+                <div class="keyboardHolder">
+                    <div class="keyboard">
+                        <Keyboard name={"azerty"} selectKeys={selectedKey} isStatic={true} allowCooling={false} data={frWikiData} boardDims={firstBoardDims} specialKeys="count" interaction={true}/>
+                        <p class="subtitle">AZERTY</p>
+                    </div>
+                    <div class="keyboard">
+                        <Keyboard name={"french-csa"} selectKeys={selectedKey} isStatic={true} allowCooling={false} data={frWikiData} boardDims={firstBoardDims} specialKeys="count" interaction={true}/>
+                        <p class="subtitle">CSA</p>
+                    </div>
                 </div>
-                <div class="keyboard">
-                    <Keyboard name={"french-csa"} selectKeys={selectedKey} isStatic={true} allowCooling={false} data={frWikiData} boardDims={firstBoardDims} specialKeys="count" interaction={true}/>
-                    <p class="subtitle">CSA</p>
-                </div>
+                
             </div>
         </div>
 
@@ -92,12 +151,49 @@
         <div>
             <div>
                 <h2>Bigrams</h2>
-<!--                <Bipartite />-->
+                <div class='labels'>
+                    <label>
+                        <input type="radio" name="lang" value="eng" onchange={handleChange} checked={selectedBigLang === "eng"}/>
+                        <p2>English Bigrams</p2>
+                    </label>
+                    
+                    <label>
+                        <input type="radio" name="lang" value="fr" onchange={handleChange} />
+                        <p2>French Bigrams</p2>
+                    </label> 
+                </div>
+                
+                <Bipartite data={selectedBigramData} lang={selectedBigLang} chosentFirstBi={chosentFirstBi} chosenSecondBi={chosenSecondBi}/>
+                <Keyboard 
+                    name={"letters"} 
+                    selectKeys={selectedKey} 
+                    isStatic={true} 
+                    data={dataBuilder({[charToKeys[chosentFirstBi]?.code || ""]: 1, [charToKeys[chosenSecondBi]?.code || ""]: 2})} 
+                    boardDims={50} 
+                    specialKeys="count" 
+                    colourCode={8} 
+                    clickOn={true}
+                    interaction={false}
+                    onClick={handleClickBigram}
+
+                    />
             </div>
             
             <div>
                 <h2>Trigrams</h2>  
-<!--                <Tripartite />-->
+                <Tripartite chosentFirstTri={chosentFirstTri} chosenSecondTri={chosenSecondTri} chosenThirdTri={chosenThirdTri}/>
+                <Keyboard name={"letters"} 
+                    selectKeys={selectedKey} 
+                    isStatic={true} 
+                    data={dataBuilder({[charToKeys[chosentFirstTri]?.code || ""]: 1, [charToKeys[chosenSecondTri]?.code || ""]: 2, [charToKeys[chosenThirdTri]?.code || ""]: 3})} 
+                    boardDims={30} 
+                    specialKeys="count" 
+                    colourCode={9} 
+                    clickOn={true}
+                    interaction={false}
+                    onClick={handleClickTrigram}
+
+                    />
             </div>
             <!--   Network graph  -->
 <!--            <div>-->
@@ -116,7 +212,12 @@
         </div>
         <div>
             <h2>Typing Bigrams</h2>
+<!--            SLIDER FOR FREQUENCY of BIGRAM..... -->
+<!--            <div class="sliderSpace">&ndash;&gt;-->
+<!--                        <input class="timeSlider" type="range" name="slider" min="0" max="100" >-->
+<!--                    </div>-->
             <Heatmap />
+<!--            HEAT MAP + Keyboard + bigram 2 coord-->
         </div>
     </div>
 
@@ -161,8 +262,11 @@
         justify-items: center;
         text-align: center;
         justify-content: center;
-        padding-top: 1em;
+        /* padding-top: 1em; */
         padding-left: 1em;
+    }
+    .keyboardHolder {
+        padding-top: 1em;
     }
     .visHolder{
         display: inline-flex;
@@ -318,3 +422,5 @@
 <!--<h1 class = "selection" style = "padding-left: 4.5em">Select Views</h1> -->
 <!--<input type="">-->
 
+
+ 

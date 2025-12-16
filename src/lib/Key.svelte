@@ -1,13 +1,14 @@
 <script lang="ts">
     import {onMount} from "svelte";
     import * as d3 from "d3";
-    import { cooldowns, getColour2, getColour3, customKeyDimensions} from "./constants";
+    import { cooldowns, getColour, customKeyDimensions} from "./constants";
 
     let {
         key ,
         size=1,
         code,
-        shiftOn=false,
+        clickOn=false,
+        colourCode=1,
         count=0,
         freq =0,
         isStatic=false,
@@ -24,7 +25,8 @@
             key : string,
             size : number,
             code : string,
-            shiftOn : boolean,
+            clickOn : boolean,
+            colourCode : number
             count : number,
             freq : number
             isStatic:boolean,
@@ -104,7 +106,7 @@
         .attr("height", keyDimensions.h)
         .attr("rx", 6)
         .attr("ry", 6)
-        .attr  ("fill", getColour2(count, maxVal))
+        .attr  ("fill", getColour(colourCode, count, maxVal))
         .attr("stroke", "#111111")
         .attr("stroke-width", 1)
         .style("border-radius", "5px")
@@ -112,7 +114,7 @@
         .on("mouseover", !interaction || !isSpecial ? () => {} : mouseover )
         .on("mousemove", !interaction || !isSpecial ? () => {} : mousemove )
         .on("mouseleave", !interaction || !isSpecial ? () => {} : mouseleave )
-        .on("click", !interaction || !isSpecial ? () => {} :  mouseclick )
+        .on("click", !clickOn ? () => {} :  mouseclick )
 
         // rectElem.transition().duration(500).attr("fill", getColour2(count))
             
@@ -188,7 +190,7 @@
     }
 
     function updateKey() {
-        if (rectElem) rectElem.attr("fill", getColour2(count, maxVal));
+        if (rectElem) rectElem.attr("fill", getColour(colourCode, count, maxVal));
         if (textElem) textElem.text(Math.round(count));
         //
 
