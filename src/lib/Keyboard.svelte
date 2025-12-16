@@ -1,28 +1,24 @@
 <script lang="ts">
-    import { staggeredENG } from "./keysENG";
-    import { staggeredFR } from "./keysFR";
-    import { staggeredFRCSA } from "./keysFRCSA";
-    import { staggeredDvorak } from "./keysDvorak";
-    import { staggeredLetters } from "./keysLetters";
+    import { staggeredENG } from "./layouts/keysENG";
+    import { staggeredFR } from "./layouts/keysFR";
+    import { staggeredFRCSA } from "./layouts/keysFRCSA";
+    import { staggeredDvorak } from "./layouts/keysDvorak";
+    import { staggeredLetters } from "./layouts/keysLetters";
 
     import Key from "$lib/Key.svelte";
-    import { cooldowns, customKeyDimensions,emptyData } from "./constants";
+    import { cooldowns, customKeyDimensions, getStaggered } from "./constants";
+    import {emptyData} from "./dataConstants"
     import type {textData, keyType} from "./types";
-    let {name="", data=emptyData, selectKeys=undefined, isStatic=false, boardDims=70, allowCooling=false, specialKeys="none"} :
-        { name: string,  data : textData, selectKeys ?: (keys : keyType []) => void, isStatic :boolean, boardDims:number, allowCooling:boolean, specialKeys:string} = $props()
+    let {name="", data=emptyData, selectKeys=undefined, isStatic=false, boardDims=70, allowCooling=false, specialKeys="none", interaction=false} :
+        { name: string,  data : textData, selectKeys ?: (keys : keyType []) => void, isStatic :boolean, boardDims:number, allowCooling:boolean, specialKeys:string, interaction:boolean} = $props()
 
     let shiftPressed = false
     let selectedKeys : keyType [] = $state(new Array(3))
     let keyDimensions = customKeyDimensions(boardDims)
-
-    let getStaggered = (name: string) => {
-        if (name === "qwerty") return staggeredENG;
-        if (name === "azerty") return staggeredFR;
-        if (name === "french-csa") return staggeredFRCSA;
-        if (name === "dvorak") return staggeredDvorak;
-        if (name === "letters") return staggeredLetters;
-        return staggeredENG;
-    }
+    let staggered = getStaggered(name);
+    let maxCount = $derived(Object.values(data.keyFreq).reduce((max, count) => Math.max(max, count), 0))
+    let totalCount = $derived(data.totalFreq ?? 1)
+    console.log("Total Count: ", totalCount)
 
     let isSpecial = (code: string) => {
         if (specialKeys === "none") return false;
@@ -30,12 +26,10 @@
         if (specialKeys === "count") return data.keyFreq[code] > 0;
         return false;
     }
-    let staggered = getStaggered(name);
+
 
     let rowWidths = staggered.map( row => row.reduce((sum, key) => sum + keyDimensions.w * (key.size ?? 1), 0));
     const maxRowWidth = Math.max(...rowWidths) + boardDims/2;
-    let selectedKey = $state("KeyE")
-
     let rowGaps = staggered.map((row, i) => {
         const rowWidth = rowWidths[i];
         const count = row.length;
@@ -43,6 +37,7 @@
         return (maxRowWidth - rowWidth) / (count - 1);
     });
 
+    let selectedKey = $state("Space")
 
     export const makeKeyType = (chr, code, count) => {
         return {
@@ -94,11 +89,14 @@
                          code={key.code}
                          shiftOn={shiftPressed}
                          isStatic={isStatic}
+                         interaction={interaction}
                          onUpdate={handleKeyUpdate}
                          onClick={handleKeyClick}
                          dims={boardDims}
                          allowCooling={allowCooling}
                          count={data.keyFreq[key.code] ?? 0}
+                         freq={(((data.keyFreq[key.code] ?? 0) / totalCount)*100).toFixed(2)}
+                         maxVal={maxCount}
                          isSpecial={isSpecial(key.code)}
                      />
                   </div>

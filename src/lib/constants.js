@@ -1,7 +1,10 @@
 import * as d3 from "d3";
-import {charToKeys, parseData, parseString} from "$lib/dataProcessor.js";
-import {text1} from "$lib/sampleTexts.js";
-// import type {keyType} from "./types.js";
+import {charToKeys} from "$lib/dataProcessor.js";
+import {staggeredENG} from "$lib/layouts/keysENG.js";
+import {staggeredFR} from "$lib/layouts/keysFR.js";
+import {staggeredFRCSA} from "$lib/layouts/keysFRCSA.js";
+import {staggeredDvorak} from "$lib/layouts/keysDvorak.js";
+import {staggeredLetters} from "$lib/layouts/keysLetters.js";
 
 export const cooldowns = {
     one : 0.0007,
@@ -31,10 +34,14 @@ export const keyDimensions = customKeyDimensions(70)
 
 
 
-export const emptyData = {text: "", words : [""], freq:{"" : 0}, keyFreq: {"" : 0}}
-export const sampleData = parseString(text1)
-export const qwertyData = {text: "", words : [""], freq:{"" : 0}, keyFreq: {"KeyQ" : 20, "KeyW" : 20, "KeyE" : 20, "KeyR" : 20, "KeyT" : 20, "KeyY" : 20}}
-export const azertyData = {text: "", words : [""], freq:{"" : 0}, keyFreq: {"KeyA" : 20, "KeyZ" : 20, "KeyE" : 20, "KeyR" : 20, "KeyT" : 20, "KeyY" : 20}}
+export const getStaggered = (name) => {
+    if (name === "qwerty") return staggeredENG;
+    if (name === "azerty") return staggeredFR;
+    if (name === "french-csa") return staggeredFRCSA;
+    if (name === "dvorak") return staggeredDvorak;
+    if (name === "letters") return staggeredLetters;
+    return staggeredENG;
+}
 
 export const views = [
     {id: "live", name: "Live Typing"},
@@ -45,24 +52,40 @@ export const views = [
 
 const rMin = 0
 const rMax = 100
-const getScale = (d) => Math.log(d+1) * 12
+
+/* Colours and scales */
+const getScale = (d) => Math.log10(d + 1)
+const getScale2 = (d) => Math.sqrt(d)
+const getScale3 = (d) => Math.pow(d, 5/7)
 export const getColour = d3.scaleLinear()
     .range(["white", "#bd0101"])
     .domain([rMin,rMax])
     .clamp(true)
 
-const colRange = d3.interpolateRgbBasis(["white", "yellow", "orange", "#bd0101"])
 const colRange2 = d3.interpolateRgbBasis(["white", "#fd861e","#fd4a1e", "#cc0b0b"])
 const colRange3 = (t) => d3.interpolateYlOrRd(t)
+const colRange4 = (t) => d3.interpolateOrRd(t)
 
-export const getColour2 = d3.scaleSequential(colRange2)
-    .domain([getScale(rMin),getScale(rMax)])
-    .clamp(true)
-export const getColour3 = d3.scaleSequential(colRange3)
-    // .domain([1,50])
-    .domain([Math.log(rMin), Math.log(rMax)])
-    .clamp(true)
+export const getColour2 = (d, vMax=rMax) => {
+    return d3.scaleSequential(colRange2)
+        .domain([getScale3(rMin),getScale3(vMax)])
+        .clamp(true)
+        (getScale3(d))
+    }
+export const getColour3 = (d, vMax=rMax) => {
+    return d3.scaleSequential(colRange3)
+        .domain([getScale2(rMin), getScale2(vMax)])
+        .clamp(true)
+        (getScale2(d))
+    }
 
+export const getColour4 = (d, vMax=rMax) => {
+    return d3.scaleSequential(colRange3)
+        .domain([getScale2(rMin), getScale2(vMax)])
+        .clamp(true)
+        (getScale2(d))
+    }
+    
 
 
 

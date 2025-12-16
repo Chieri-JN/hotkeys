@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { emptyData } from "./constants";
     import type { textData } from "./types";
+    import {emptyData} from "./dataConstants"
 
     let {data=emptyData} : {data : textData} = $props();
 </script>

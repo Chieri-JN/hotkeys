@@ -1,15 +1,18 @@
 <script lang="ts">
+    import { goto } from '$app/navigation';
+    // Data 
+    import { qwertyData, azertyData, engWikiData, frWikiData} from "../lib/dataConstants"
 
-    import {fillerKeyType, qwertyData, azertyData, views} from "../lib/constants.js"
+    // Constants / helpers
+    import {fillerKeyType, views} from "../lib/constants.js"
     import { showLayout } from "$lib/stores.js";
     import type { keyType } from "../lib/types";
-
+    import { parseData } from "../lib/dataProcessor.js";
+    // Components
     import Keyboard from "$lib/Keyboard.svelte";
     import KeyGraph from  "$lib/KeyGraph.svelte"
-    import { parseData } from "../lib/dataProcessor.js";
-    import { goto } from '$app/navigation';
     import Key from "$lib/Key.svelte";
-    import Title from "$lib/title.svelte";
+    import Title from "$lib/Title.svelte";
     import Tripartite from "$lib/Tripartite.svelte";
     import Bipartite from "$lib/Bipartite.svelte";
     import NetworkGraph from "$lib/NetworkGraph.svelte";
@@ -22,6 +25,7 @@
     let selectedKeys = $state([fillerKeyType, fillerKeyType, fillerKeyType]);
 
 
+
     function selectedKey (keys : keyType[]) {
         // selectedChar = key.char
         selectedKeys = keys
@@ -29,6 +33,7 @@
 
     let loadedData  = $state(null);
     let narrative = $state(true) // TODO : CHANGE BACK TO FALSE
+    let firstBoardDims = 20;
 
 </script>
 {#if !narrative}
@@ -62,20 +67,20 @@
             <div class="visHolder">
                 <!-- TODO  ADD WIKI DATA-->
                 <div class="keyboard">
-                    <Keyboard name={"qwerty"} selectKeys={selectedKey} isStatic={true} allowCooling={false} data={qwertyData} boardDims={15} specialKeys="count"/>
+                    <Keyboard name={"qwerty"} selectKeys={selectedKey} isStatic={true} allowCooling={false} data={engWikiData} boardDims={firstBoardDims} specialKeys="count" interaction={true}/>
                     <p class="subtitle">QWERTY</p>
                 </div>
                 <div class="keyboard">
-                    <Keyboard name={"dvorak"} selectKeys={selectedKey} isStatic={true} allowCooling={false} data={qwertyData} boardDims={15} specialKeys="count"/>
+                    <Keyboard name={"dvorak"} selectKeys={selectedKey} isStatic={true} allowCooling={false} data={engWikiData} boardDims={firstBoardDims} specialKeys="count" interaction={true}/>
                     <p class="subtitle">DVORAK</p>
                 </div>
 
                 <div class="keyboard">
-                    <Keyboard name={"azerty"} selectKeys={selectedKey} isStatic={true} allowCooling={false} data={azertyData} boardDims={15} specialKeys="count"/>
+                    <Keyboard name={"azerty"} selectKeys={selectedKey} isStatic={true} allowCooling={false} data={frWikiData} boardDims={firstBoardDims} specialKeys="count" interaction={true}/>
                     <p class="subtitle">AZERTY</p>
                 </div>
                 <div class="keyboard">
-                    <Keyboard name={"french-csa"} selectKeys={selectedKey} isStatic={true} allowCooling={false} data={azertyData} boardDims={15} specialKeys="count"/>
+                    <Keyboard name={"french-csa"} selectKeys={selectedKey} isStatic={true} allowCooling={false} data={frWikiData} boardDims={firstBoardDims} specialKeys="count" interaction={true}/>
                     <p class="subtitle">CSA</p>
                 </div>
             </div>
@@ -87,18 +92,18 @@
         <div>
             <div>
                 <h2>Bigrams</h2>
-                <Bipartite />
+<!--                <Bipartite />-->
             </div>
             
             <div>
                 <h2>Trigrams</h2>  
-                <Tripartite />
+<!--                <Tripartite />-->
             </div>
             <!--   Network graph  -->
-            <div>
-                <h2>Common words</h2>
-                <NetworkGraph />
-            </div>
+<!--            <div>-->
+<!--                <h2>Common words in English</h2>-->
+<!--                <NetworkGraph />-->
+<!--            </div>-->
         </div>
     </div>
 
@@ -168,8 +173,8 @@
         justify-content: center;
         align-items: center;
         height: 75vh;
-        flex-direction: row;
-        /* gap: 2em; */
+        flex-direction: column;
+         gap: 2em;
     }
 
     .subhead {

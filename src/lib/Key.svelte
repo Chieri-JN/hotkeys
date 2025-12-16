@@ -1,9 +1,7 @@
 <script lang="ts">
     import {onMount} from "svelte";
     import * as d3 from "d3";
-    import type {textData} from "./types";
-    import { cooldowns, getColour2, getColour3, customKeyDimensions, emptyData} from "./constants";
-
+    import { cooldowns, getColour2, getColour3, customKeyDimensions} from "./constants";
 
     let {
         key ,
@@ -11,14 +9,16 @@
         code,
         shiftOn=false,
         count=0,
-        corpus = emptyData,
+        freq =0,
         isStatic=false,
+        interaction=false,
         onUpdate,
         onClick,
         dims = 70,
         allowCooling=false,
         isSpecial=false,
-        inKeyboard=true
+        inKeyboard=true,
+        maxVal
     } :
         {
             key : string,
@@ -26,14 +26,16 @@
             code : string,
             shiftOn : boolean,
             count : number,
-            corpus : textData,
-            isStatic:boolean
+            freq : number
+            isStatic:boolean,
+            interaction : boolean,
             onUpdate ?: (code: string, count: number, char: string) => void,
             onClick?: (code: string, char : string) => void,
             dims : number,
             allowCooling : boolean,
             isSpecial : boolean
-            inKeyboard : boolean
+            inKeyboard : boolean,
+            maxVal : number
         } = $props()
 
     let keyDimensions = customKeyDimensions(dims)
@@ -53,8 +55,8 @@
     function mouseover(event, d) {
         tooltip.style("opacity", 1)
             .html(`<strong style="font-weight: 700;">Key: ${key}</strong>
-								<br> <span style="font-family: neue-haas-grotesk-display, sans-serif;"> <em >Tempurature: </em>${Math.round(count) + "ºC"}</span>
-								<br><span style="font-family: neue-haas-grotesk-display, sans-serif;"> <em>Frequency: </em>${" ---"}</span>`);
+                                <br><span style="font-family: neue-haas-grotesk-display, sans-serif;"> <em>Frequency: </em>${freq + "%"}</span>
+								<br> <span style="font-family: neue-haas-grotesk-display, sans-serif;"> <em >Count: </em>${Math.round(count)}</span>`);
     }
 
     function mousemove(event, d) {
@@ -102,15 +104,15 @@
         .attr("height", keyDimensions.h)
         .attr("rx", 6)
         .attr("ry", 6)
-        .attr  ("fill", getColour2(count))
+        .attr  ("fill", getColour2(count, maxVal))
         .attr("stroke", "#111111")
         .attr("stroke-width", 1)
         .style("border-radius", "5px")
         .style("cursor", "pointer")
-        .on("mouseover", isStatic ? () => {} : mouseover )
-        .on("mousemove", isStatic ? () => {} : mousemove )
-        .on("mouseleave", isStatic ? () => {} : mouseleave )
-        .on("click", mouseclick )
+        .on("mouseover", !interaction || !isSpecial ? () => {} : mouseover )
+        .on("mousemove", !interaction || !isSpecial ? () => {} : mousemove )
+        .on("mouseleave", !interaction || !isSpecial ? () => {} : mouseleave )
+        .on("click", !interaction || !isSpecial ? () => {} :  mouseclick )
 
         // rectElem.transition().duration(500).attr("fill", getColour2(count))
             
@@ -137,28 +139,28 @@
                 .attr("font-weight", 500)
                 .text(key);
 
-            if (!isStatic) {  
-                textElem = g.append("text")
-                    .attr("x", (keyDimensions.textX * size) )
-                    .attr("y", keyDimensions.textY + 20)
-                    .attr("text-anchor", "middle")
-                    .attr("fill", "black")
-                    .attr("font-size", 12)
-                    .attr("font-family", "neue-haas-grotesk-display, sans-serif")
-                    .attr("font-weight", 500)
-                    .text(Math.round(count))
-            }
+            // if (!isStatic) {
+            //     textElem = g.append("text")
+            //         .attr("x", (keyDimensions.textX * size) )
+            //         .attr("y", keyDimensions.textY + 20)
+            //         .attr("text-anchor", "middle")
+            //         .attr("fill", "black")
+            //         .attr("font-size", 12)
+            //         .attr("font-family", "neue-haas-grotesk-display, sans-serif")
+            //         .attr("font-weight", 500)
+            //         .text(Math.round(count))
+            // }
         }else{
                 g.append("text")
                 .attr("x", (keyDimensions.textX * size) )
-                .attr("y", keyDimensions.textY)
+                .attr("y", keyDimensions.textY*1.1)
                 // .attr("y", keyDimensions.textY + keyDimensions.dim * 0.025)
                 .attr("text-anchor", "middle")
                 // .attr("dominant-baseline", "middle")
                 .attr("fill", "black")
-                .attr("font-size", keyDimensions.fontSize)
+                .attr("font-size", keyDimensions.fontSize*1.6)
                 .attr("font-family", "neue-haas-grotesk-display, sans-serif")
-                .attr("font-weight", 700).text(key);
+                .attr("font-weight", 600).text(key);
         }
             
 
@@ -186,7 +188,7 @@
     }
 
     function updateKey() {
-        if (rectElem) rectElem.attr("fill", getColour2(count));
+        if (rectElem) rectElem.attr("fill", getColour2(count, maxVal));
         if (textElem) textElem.text(Math.round(count));
         //
 

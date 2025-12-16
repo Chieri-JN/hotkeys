@@ -1,7 +1,7 @@
 <script lang="ts">
 import Keyboard from "$lib/Keyboard.svelte";
 import type {textData} from "./types";
-import { emptyData } from "./constants";
+import {emptyData} from "./dataConstants"
 let {data=emptyData, dataSetName="Filler Name"} : {data : textData, dataSetName : string} = $props()
 </script>
 

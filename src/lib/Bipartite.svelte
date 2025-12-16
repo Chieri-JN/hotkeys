@@ -1,8 +1,12 @@
 <script lang="ts">
-    import { emptyData } from "./constants";
     import type { textData } from "./types";
+    import {emptyData} from "./dataConstants"
     
     let {data=emptyData} : {data : textData} = $props();
+
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    const N = 30;
+
 </script>
 
 <div>
