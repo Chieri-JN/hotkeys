@@ -23,17 +23,7 @@
 {#if $showLayout}
 	<nav>
 		<Title weight={500} size={1.5}/>
-<!--		<label>-->
-<!--			<input type="radio" name="page" value="/" onchange={handleChange} />-->
-<!--			<p2>Interactive</p2>-->
-<!--		</label>-->
-
-<!--		<label>-->
-<!--			<input type="radio" name="page" value="/gallery" onchange={handleChange} />-->
-<!--			<p2>Gallery</p2>-->
-<!--		</label>-->
 	</nav>
-	<!--<p>Heat Map of your keystrokes</p>-->
 {/if}
 
 <style>
