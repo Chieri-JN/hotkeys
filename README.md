@@ -3,4 +3,4 @@
 ## Overview
 Hotkeys is an interactive visualization that aims to show character frequencies via heatmap on a keyboard.
 
-See: [here]{https://chieri-jn.github.io/hotkeys/}
+See: https://chieri-jn.github.io/hotkeys/
