@@ -2,7 +2,7 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import { goto } from '$app/navigation';
 	import { showLayout } from '$lib/stores.js';
-	import Title from '$lib/title.svelte';
+	import Title from '$lib/Title.svelte';
 	let selected = '/';
 
 	function handleChange(event) {
@@ -37,30 +37,7 @@
 {/if}
 
 <style>
-	nav {
-		.title {
-		font-size: 3rem;
-		padding-left: 0.25em;
-		/*font-weight: bold;*/
-		font-family: "redonda", sans-serif;
-		font-weight: 800;
-		font-style: italic;
-	}
 
-	.hot {
-		color: red;
-		font-weight: 900;
-		text-transform: uppercase;
-
-	}
-	}
-	
-
-	p2 {
-		font-family: "neue-haas-grotesk-display", sans-serif;
-		font-weight: 500;
-		font-style: normal;
-	}
 
 
 </style>

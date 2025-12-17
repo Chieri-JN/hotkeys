@@ -12,6 +12,7 @@
     import Keyboard from "$lib/Keyboard.svelte";
     import KeyGraph from  "$lib/KeyGraph.svelte"
     import Key from "$lib/Key.svelte";
+    // import Title from "$lib/Title.svelte";
     import Title from "$lib/Title.svelte";
     import Tripartite from "$lib/Tripartite.svelte";
     import Bipartite from "$lib/Bipartite.svelte";
@@ -524,10 +525,7 @@
         font-style: normal;
         font-size: 1.4em;
         padding-bottom: 0.5em;
-        em {
-            font-style: italic;
-            font-weight: 700;
-        }
+
     }
     .subtitle {
         font-family: "neue-haas-grotesk-display", sans-serif;
