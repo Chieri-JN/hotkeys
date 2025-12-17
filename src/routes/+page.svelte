@@ -286,7 +286,7 @@
                         have a lot more possibilities.
                     </p>
                     <h2><strong>Bigram Prefix:</strong> <em>{chosentFirstBi || "Selecet a letter"}</em></h2>
-                    <h2><strong>Bigram Frequency:</strong> <em>{chosentFirstBi ? ((relevantBigrams.find(bg => bg.first === chosentFirstBi)?.freq || 0) / totalBigramFrequency * 100).toFixed(2) + '%' : '0%'}</em></h2>
+                    <h2><strong>Bigram Frequency:</strong> <em>{chosentFirstBi ? ((relevantBigrams.reduce((sum, bg) => sum + bg.freq, 0)) / totalBigramFrequency * 100).toFixed(2) + '%' : '0%'}</em></h2>
                     
                 </div>
 
@@ -395,7 +395,7 @@
 
                         </p>
                         <h2><strong>Trigram Prefix:</strong> <em>{chosenFirstTri + chosenSecondTri || "Selecet letters"}</em></h2>   
-                        <h2><strong>Trigram Frequency:</strong> <em>{chosenFirstTri + chosenSecondTri ? ((relevantTrigrams.find(tri => tri.first === chosenFirstTri && tri.second === chosenSecondTri)?.freq || 0) / totalTrigramFrequency * 100).toFixed(2) + '%' : '0%'}</em></h2>
+                        <h2><strong>Trigram Frequency:</strong> <em>{chosenFirstTri + chosenSecondTri ? ((relevantTrigrams.reduce((sum, tri) => sum + tri.freq, 0)) / totalTrigramFrequency * 100).toFixed(2) + '%' : '0%'}</em></h2>
                     </div>
                     <Tripartite data={selectedTrigramData} lang={selectedTrigLang} chosenFirstTri={chosenFirstTri} chosenSecondTri={chosenSecondTri} chosenThirdTri={chosenThirdTri}/>
                 </div>
