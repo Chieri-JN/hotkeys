@@ -383,7 +383,7 @@
                         <input type="radio" name="tri" value="fr" onchange={handleChangeTrigram} />
                         <p3>French Trigrams</p3>
                     </label> 
-                    <button class="clearButton" onclick={() => {chosentFirstBi = ""}}>Clear Selection</button>
+                    <button class="clearButton" onclick={() => {chosenFirstTri = ""; chosenSecondTri = "";}}>Clear Selection</button>
                 </div>
                 <div class="visHolder">
                     <div class="TextBox3">
