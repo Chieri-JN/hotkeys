@@ -51,7 +51,7 @@
     let rowPaddings: number[] = $state([]);
     let maxRowWidth: number = $state(0);
 
-    if (name !== "lettersENG" && name !== "lettersAZERTY") {
+    if (name !== "lettersENG" && name !== "lettersAZERTY" && name !== "lettersCSA" && name !== "lettersDvorak") {
         rowWidths = staggered.map( row => row.reduce((sum, key) => sum + keyDimensions.w * (key.size ?? 1), 0) as number);
         maxRowWidth = Math.max(...rowWidths) + boardDims/2;
         rowGaps = staggered.map((row, i) => {
@@ -73,7 +73,14 @@
 
         rowPaddings = staggered.map((row, i) => {
             if (i >= leftKeyWidths.length) return 0;
-            return keyDimensions.w * (leftKeyWidths[i] - referenceLeftWidth);
+            let basePadding = keyDimensions.w * (leftKeyWidths[i] - referenceLeftWidth);
+            // Add extra padding for Dvorak's weird layout
+            if (name === "lettersDvorak" && i === 0) {
+                basePadding += keyDimensions.w * 3;
+            }else if (name === "lettersDvorak" && i === 2) {
+                basePadding += keyDimensions.w *1;
+            }
+            return basePadding;
         });
 
         const rightFillRatio = 0.2; 
@@ -82,6 +89,7 @@
             const count = row.length;
             if (count <= 1) return 0;
             const missingWidth = keyDimensions.w * rightMissingWidths[i] * rightFillRatio;
+            // const missingWidth = keyDimensions.w * rightMissingWidths[i] * rightFillRatio/(i+1);
             return missingWidth / (count - 1);
         });
 

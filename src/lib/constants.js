@@ -6,6 +6,8 @@ import {staggeredFRCSA} from "$lib/layouts/keysFRCSA.js";
 import {staggeredDvorak} from "$lib/layouts/keysDvorak.js";
 import {staggeredLetters} from "$lib/layouts/keysLetters.js";
 import {staggeredAZERTY} from "$lib/layouts/keysAZERTY.js";
+import {staggeredLettersCSA} from "$lib/layouts/keysLettersCSA.js";
+import {staggeredLettersDvorak} from "$lib/layouts/keysLettersDvorak.js";
 
 export const cooldowns = {
     one : 0.0007,
@@ -42,6 +44,8 @@ export const getStaggered = (name) => {
     if (name === "dvorak") return staggeredDvorak;
     if (name === "lettersENG") return staggeredLetters;
     if (name === "lettersAZERTY") return staggeredAZERTY;
+    if (name === "lettersCSA") return staggeredLettersCSA;
+    if (name === "lettersDvorak") return staggeredLettersDvorak;
     return staggeredENG;
 }
 

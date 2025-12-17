@@ -24,7 +24,7 @@
         const minFreq = d3.min(data, d => d.freq) || 1;
         
         const width = 800;
-        const height = keys.length * 160;
+        const height = keys.length * 210;
         const marginTop = 40;
         const marginRight = 10;
         const marginBottom = 40;

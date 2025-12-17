@@ -29,7 +29,7 @@ frBigrams.sort((a, b) =>  a.freq - b.freq);
 // Trigrams
 export const emptyTrigrams = {tri : "", first: "", second: "", third: "", freq : 0}
 export const engTrigrams = Object.entries(englishTrigam)
-    .slice(0, 1200)  // Take top 1200 most frequent trigrams cause there are so many of them lol
+    .slice(0, 1500)  // Take top 1500 cause there are so many of them lol
     .map(([bg, count]) => ({
         bi : bg,
         first: bg[0],
@@ -40,7 +40,7 @@ export const engTrigrams = Object.entries(englishTrigam)
 engTrigrams.sort((a, b) =>  a.freq - b.freq);
 
 export const frTrigrams = Object.entries(frenchTrigam)
-    .slice(0, 1200)  // Take top 1200
+    .slice(0, 1500)  // Take top 1500
     .map(([bg, count]) => ({
         bi : bg,
         first: bg[0],

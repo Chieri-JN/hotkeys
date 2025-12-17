@@ -21,7 +21,7 @@
 
     function makeGraph() {
         const maxFreq = d3.max(data, d => d.freq) || 1;
-        const minFreq = d3.min(data, d => d.freq) || 1;
+
         
         const width = 800;
         const height = keys.length * 180;
