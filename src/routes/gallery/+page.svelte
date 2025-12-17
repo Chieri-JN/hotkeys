@@ -1,6 +1,6 @@
 <script lang="ts">
     import GalleryDataset from "$lib/GalleryDataset.svelte";
-    import { sampleData } from "../../lib/constants";
+    import { sampleData  } from "../../lib/dataConstants";
 </script>
 
 <h1>Gallery</h1>
